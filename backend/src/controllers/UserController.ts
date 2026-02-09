@@ -12,6 +12,16 @@ const register = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
+        // check username length
+        if (username.length < 7) {
+            return res.status(400).json({ success: false, message: "username must be greater than 6" });
+        }
+
+        // check password length
+        if (password.length < 8) {
+            return res.status(400).json({ success: false, message: "password must be greater than 7" });
+        }
+
         // check username already existed
         const UsernameExists = await UserModel.findOne({ username });
         if (UsernameExists) {
@@ -62,6 +72,11 @@ const login = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
+        // check username length
+        if (username.length < 7) {
+            return res.status(400).json({ success: false, message: "username must be greater than 6" });
+        }
+        
         // check username is registered
         const user = await UserModel.findOne({ username });
         if (!user) {

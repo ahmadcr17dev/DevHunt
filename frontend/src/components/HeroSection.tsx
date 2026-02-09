@@ -21,7 +21,7 @@ const HeroSection = () => {
 
                 <NavLink
                     to="/login"
-                    className="mt-8 sm:mt-10 px-8 sm:px-10 md:px-12 py-3 bg-[#004fcb] text-white font-medium border rounded-md hover:cursor-pointer hover:bg-[#002970] transition duration-500">
+                    className="mt-8 sm:mt-10 px-8 sm:px-10 md:px-12 py-3 bg-indigo-600 text-white font-medium border rounded-md hover:cursor-pointer hover:bg-indigo-700 transition duration-500">
                     Get Started
                 </NavLink>
             </section>
