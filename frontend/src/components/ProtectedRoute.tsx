@@ -1,21 +1,17 @@
 import { useAuth } from "../context/AuthContext";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import { useEffect } from "react";
 
 const ProtectedRoute = () => {
     const { user, loadingUser } = useAuth();
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/login", { replace: true }); // redirect immediately if not logged in
-        }
-    }, [user]);
-
-    // Wait for user to load
+    // While auth is loading, show loader
     if (loadingUser) return <Loader />;
 
+    // If user is not logged in, redirect to login
+    if (!user) return <Navigate to="/login" replace />;
+
+    // User is logged in, render protected routes
     return <Outlet />;
 };
 

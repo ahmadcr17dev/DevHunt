@@ -10,9 +10,15 @@ const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(contextUser); // local state for fresh data
     const [showConfirmPanel, setShowConfirmPanel] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2500)
+        return () => clearTimeout(timer);
+    }, [])
     // Redirect if no user
     if (!contextUser) return <Navigate to="/login" replace />;
 
@@ -38,11 +44,9 @@ const Profile = () => {
     }, [contextUser]);
 
     const confirmLogout = () => {
-        setLoading(true);
         logout(); // remove token & user from context & localStorage
         setShowConfirmPanel(false);
         navigate("/login", { replace: true });
-        setLoading(false);
     };
 
     const cancelLogout = () => setShowConfirmPanel(false);

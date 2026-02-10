@@ -1,9 +1,22 @@
 import logo1 from "../images/logo1.png";
 import { NavLink } from "react-router-dom";
+import Loader from "./Loader";
+import { useEffect, useState } from "react";
 
 const HeroSection = () => {
+    const [loading, setLoading] = useState(true);
+
+    // load loader on page load
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2500)
+        return () => clearTimeout(timer);
+    }, [])
+
     return (
         <>
+            {loading && <Loader />}
             <section className="text-center flex flex-col items-center px-4 sm:px-6 lg:px-8">
                 <img
                     src={logo1}
