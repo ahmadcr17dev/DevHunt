@@ -8,13 +8,12 @@ interface User {
     fullname: string;
     email: string;
     isProfileCompleted: boolean;
-    role: "jobseeker" | "employer";
+    role: "jobseeker" | "employer" | "both";
     phone: string;
     gender: "male" | "female" | "custom";
     location: string;
     domain: string;
     bio: string;
-    // add more fields if needed
 }
 
 interface AuthContextType {

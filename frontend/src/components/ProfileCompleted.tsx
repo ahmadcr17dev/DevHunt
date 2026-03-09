@@ -9,7 +9,7 @@ interface ProfileFormData {
     username: string;
     fullname: string;
     gender: "male" | "female" | "custom";
-    role: "jobseeker" | "employer";
+    role: "jobseeker" | "employer" | "both";
     domain: string;
     bio: string;
     phone: string;
@@ -54,7 +54,7 @@ const ProfileCompleted = () => {
                 username: fillUser.username || prev.username,
                 fullname: fillUser.fullname || prev.fullname,
                 gender: fillUser.gender as "male" | "female" | "custom" || prev.gender,
-                role: fillUser.role || prev.role, // ✅ only use stored role if exists
+                role: fillUser.role as "jobseeker" | "employer" | "both" || prev.role,
                 domain: fillUser.domain || prev.domain,
                 bio: fillUser.bio || prev.bio,
                 phone: fillUser.phone || prev.phone,
@@ -124,78 +124,144 @@ const ProfileCompleted = () => {
     return (
         <>
             {loading && <Loader />}
-            <div className="min-h-screen bg-gray-100 px-4 py-8">
-                <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+
+            {/* Background with gradient */}
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-slate-50 px-4 py-8">
+
+                {/* Decorative background elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl"></div>
+                </div>
+
+                <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-3">
 
                         {/* LEFT COLUMN */}
-                        <div className="bg-slate-900 text-white p-8 lg:p-10">
-                            <h2 className="text-2xl font-bold mb-6">Your Account</h2>
+                        <div className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 text-white p-8 lg:p-10">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <h2 className="text-2xl font-bold">Your Account</h2>
+                            </div>
+
                             <div className="space-y-4 text-sm">
-                                <div>
-                                    <p className="text-gray-400">Username</p>
+                                <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+                                    <p className="text-indigo-200 text-xs uppercase tracking-wide mb-1">Username</p>
                                     <p className="font-semibold">{user?.username}</p>
                                 </div>
-                                <div>
-                                    <p className="text-gray-400">Email</p>
-                                    <p className="font-semibold">{user?.email}</p>
+                                <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+                                    <p className="text-indigo-200 text-xs uppercase tracking-wide mb-1">Email</p>
+                                    <p className="font-semibold break-all">{user?.email}</p>
                                 </div>
-                                <div>
-                                    <p className="text-gray-400">Role</p>
+                                <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+                                    <p className="text-indigo-200 text-xs uppercase tracking-wide mb-1">Role</p>
                                     <p className="font-semibold capitalize">{user?.role}</p>
                                 </div>
-                                <div>
-                                    <p className="text-gray-400">Profile Status</p>
-                                    <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-medium ${user?.isProfileCompleted ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-300"}`}>
+                                <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+                                    <p className="text-indigo-200 text-xs uppercase tracking-wide mb-1">Profile Status</p>
+                                    <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold ${user?.isProfileCompleted ? "bg-green-500 text-white" : "bg-yellow-500 text-white"}`}>
+                                        <span className={`w-2 h-2 rounded-full ${user?.isProfileCompleted ? "bg-white" : "bg-white animate-pulse"}`} />
                                         {user?.isProfileCompleted ? "Completed" : "Incomplete"}
                                     </span>
                                 </div>
                             </div>
+
                             {!user?.isProfileCompleted && (
-                                <div className="mt-10 text-xs text-gray-400">
-                                    Complete your profile to unlock full features.
+                                <div className="mt-8 p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p className="text-sm text-indigo-100">
+                                            Complete your profile to unlock full features.
+                                        </p>
+                                    </div>
                                 </div>
                             )}
                         </div>
 
                         {/* RIGHT COLUMN */}
                         <div className="lg:col-span-2 p-6 sm:p-10">
-                            <h1 className="text-2xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
-                            <p className="text-sm text-gray-600 mb-6">
-                                This information helps employers understand you better.
-                            </p>
+                            <div className="mb-8">
+                                <h1 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
+                                <p className="text-base text-gray-600">
+                                    This information helps employers understand you better.
+                                </p>
+                            </div>
+
                             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Fullname */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Full Name</label>
-                                    <input type="text" name="fullname" value={formData.fullname} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                                    <input
+                                        type="text"
+                                        name="fullname"
+                                        value={formData.fullname}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    />
                                 </div>
+
                                 {/* Username */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Username</label>
-                                    <input type="text" name="username" value={formData.username} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    />
                                 </div>
+
                                 {/* Gender */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Gender</label>
-                                    <select name="gender" value={formData.gender} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Gender</label>
+                                    <select
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    >
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="custom">Custom</option>
                                     </select>
                                 </div>
+
                                 {/* Role */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Role</label>
-                                    <select name="role" value={formData.role} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Role</label>
+                                    <select
+                                        name="role"
+                                        value={formData.role}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    >
                                         <option value="jobseeker">Job Seeker</option>
                                         <option value="employer">Employer</option>
+                                        <option value="both">Both</option>
                                     </select>
                                 </div>
+
                                 {/* Domain */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Domain</label>
-                                    <select name="domain" value={formData.domain} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Domain</label>
+                                    <select
+                                        name="domain"
+                                        value={formData.domain}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    >
                                         <option value="">Select Domain</option>
                                         <option value="Information Technology">Information Technology</option>
                                         <option value="Design & Creation">Design & Creative</option>
@@ -204,28 +270,72 @@ const ProfileCompleted = () => {
                                         <option value="Finance & Admin">Finance & Admin</option>
                                     </select>
                                 </div>
+
                                 {/* Phone */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Phone</label>
-                                    <PhoneInput country="us" value={formData.phone} onChange={handlePhoneChange} inputProps={{ name: "phone", required: true }} containerClass="w-full" inputClass="!w-full !py-2 !pl-12 !border !rounded-lg focus:!ring-2 focus:!ring-blue-500" />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                                    <div className="relative">
+                                        <PhoneInput
+                                            country="us"
+                                            value={formData.phone}
+                                            onChange={handlePhoneChange}
+                                            inputProps={{ name: "phone", required: true }}
+                                            containerClass="w-full"
+                                            inputClass="!w-full !py-3 !pl-12 !border !border-gray-200 !rounded-xl !bg-gray-50 focus:!ring-2 focus:!ring-indigo-500 !focus:!border-indigo-500"
+                                        />
+                                    </div>
                                 </div>
+
                                 {/* Location */}
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Location</label>
-                                    <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={formData.location}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        required
+                                    />
                                 </div>
+
                                 {/* Bio */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-medium mb-1">Bio</label>
-                                    <textarea name="bio" value={formData.bio} onChange={handleChange} rows={5} minLength={100} maxLength={1500} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Bio</label>
+                                    <textarea
+                                        name="bio"
+                                        value={formData.bio}
+                                        onChange={handleChange}
+                                        rows={5}
+                                        minLength={100}
+                                        maxLength={1500}
+                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300 resize-none"
+                                        required
+                                    />
                                 </div>
 
-                                {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
-                                {success && <p className="mb-2 text-sm text-green-600">{success}</p>}
+                                {/* Error & Success Messages */}
+                                {error && (
+                                    <div className="md:col-span-2 p-4 bg-red-50 border border-red-200 rounded-xl">
+                                        <p className="text-red-600 text-sm font-medium">{error}</p>
+                                    </div>
+                                )}
+
+                                {success && (
+                                    <div className="md:col-span-2 p-4 bg-green-50 border border-green-200 rounded-xl">
+                                        <p className="text-green-600 text-sm font-medium">{success}</p>
+                                    </div>
+                                )}
 
                                 <div className="md:col-span-2">
-                                    <button type="submit" className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition hover:cursor-pointer">
-                                        Save
+                                    <button
+                                        type="submit"
+                                        className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:from-indigo-700 hover:to-purple-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                        <span>Save Profile</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </button>
                                 </div>
                             </form>

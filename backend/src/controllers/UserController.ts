@@ -137,7 +137,7 @@ const logout = async (res: Response) => {
 const ProfileCompleted = async (req: Request, res: Response) => {
     try {
         // Get userId from request body (since we don't have auth middleware)
-        const { userId, username, fullname, phone, gender, location, domain, bio } = req.body;
+        const { userId, username, fullname, phone, gender, role, location, domain, bio } = req.body;
 
         if (!userId) {
             return res.status(400).json({ success: false, message: "User ID is required" });
@@ -151,6 +151,7 @@ const ProfileCompleted = async (req: Request, res: Response) => {
                 fullname,
                 phone,
                 gender,
+                role,
                 location,
                 domain,
                 bio,

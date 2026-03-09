@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EmployerProtectedRoute from "./components/EmployerProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
+import PostJob from "./components/PostJob";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/postjob" element={<PostJob />} />
 
         {/* General Protected Route */}
         <Route element={<ProtectedRoute />}>

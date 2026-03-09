@@ -1,9 +1,9 @@
+import EmployerSidebar from "../components/EmployerSidebar";
+
 const DashboardPage = () => {
     return(
         <>
-            <h1>
-                This is Employer Dashboard
-            </h1>
+            <EmployerSidebar />
         </>
     );
 }

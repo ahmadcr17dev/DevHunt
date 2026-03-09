@@ -49,86 +49,135 @@ const Register = () => {
     return (
         <>
             {loading && <Loader />}
-            <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
-                <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg flex overflow-hidden">
 
-                    {/* Left Section */}
-                    <div className="w-full lg:w-1/2 p-6 sm:p-10">
+            {/* Background with gradient */}
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center px-4 py-8">
+
+                {/* Decorative background elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+                </div>
+
+                {/* Main Card */}
+                <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex overflow-hidden relative z-10">
+
+                    {/* Left Section - Form */}
+                    <div className="w-full lg:w-1/2 p-6 sm:p-10 lg:p-12">
                         {/* Logo */}
-                        <div className="flex justify-center">
-                            <img src={logo1} alt="Logo" className="w-[250px]" />
+                        <div className="flex justify-center mb-8">
+                            <img
+                                src={logo1}
+                                alt="Logo"
+                                className="w-[250px] transition-all duration-300 hover:scale-105"
+                            />
                         </div>
 
                         {/* Content */}
                         <div className="my-6 text-center">
-                            <h1 className="text-1xl sm:text-2xl font-extrabold text-gray-900 my-6">
+                            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
                                 Register First Than Explore
                             </h1>
+                            <p className="text-base text-gray-600">
+                                Create your account to get started
+                            </p>
 
                             {/* Form */}
-                            <form className="max-w-xs mx-auto space-y-4" onSubmit={HandleSubmit}>
-                                <input
-                                    type="text"
-                                    placeholder="Username"
-                                    className="w-full px-4 py-2 rounded-md bg-gray-100 border focus:outline-none focus:border-gray-400"
-                                    value={FormData.username}
-                                    onChange={HandleChange}
-                                    name="username"
-                                    minLength={7}
-                                    maxLength={15}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className="w-full px-4 py-2 rounded-md bg-gray-100 border focus:outline-none focus:border-gray-400"
-                                    value={FormData.email}
-                                    onChange={HandleChange}
-                                    name="email"
-                                />
-                                <div className="relative">
+                            <form className="max-w-sm mx-auto mt-10 space-y-5" onSubmit={HandleSubmit}>
+                                {/* Username Input */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                        Username
+                                    </label>
                                     <input
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Password"
-                                        className="w-full px-4 py-2 pr-10 rounded-md bg-gray-100 border focus:outline-none focus:border-gray-400"
-                                        value={FormData.password}
+                                        type="text"
+                                        placeholder="Enter your username"
+                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        value={FormData.username}
                                         onChange={HandleChange}
-                                        name="password"
-                                        minLength={8}
+                                        name="username"
+                                        minLength={7}
+                                        maxLength={15}
                                     />
-
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(prev => !prev)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                                        aria-label={showPassword ? "Hide password" : "Show password"}
-                                    >
-                                        {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                                    </button>
                                 </div>
 
-                                {/* error & success messages */}
-                                {error &&
-                                    <p className="text-red-600 text-sm">
-                                        {error}
-                                    </p>
-                                }
+                                {/* Email Input */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                        Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        value={FormData.email}
+                                        onChange={HandleChange}
+                                        name="email"
+                                    />
+                                </div>
 
-                                {success &&
-                                    <p className="text-green-600 text-sm">
-                                        {success}
-                                    </p>
-                                }
+                                {/* Password Input */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="Enter your password"
+                                            className="w-full px-4 py-3 pr-12 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                            value={FormData.password}
+                                            onChange={HandleChange}
+                                            name="password"
+                                            minLength={8}
+                                        />
 
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(prev => !prev)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 focus:outline-none transition-colors duration-200"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Error & Success Messages */}
+                                {error && (
+                                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                                        <p className="text-red-600 text-sm font-medium">
+                                            {error}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {success && (
+                                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <p className="text-green-600 text-sm font-medium">
+                                            {success}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    className="w-full py-3 bg-indigo-600 text-white font-medium border hover:bg-indigo-700 hover:cursor-pointer transition duration-500 text-white rounded-lg font-semibold flex items-center justify-center gap-2"
+                                    className="w-full py-3.5 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
                                 >
-                                    Sign Up
+                                    <span>Sign Up</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
                                 </button>
 
+                                {/* Sign In Link */}
                                 <p className="text-sm text-gray-600 text-center mt-6">
                                     Already have an account?{" "}
-                                    <NavLink to="/login" className="text-blue-700">
+                                    <NavLink
+                                        to="/login"
+                                        className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition-colors duration-200"
+                                    >
                                         Sign In
                                     </NavLink>
                                 </p>
@@ -137,12 +186,14 @@ const Register = () => {
                     </div>
 
                     {/* Right Illustration */}
-                    <div className="w-full lg:w-1/2 flex justify-center">
-                        <Lottie
-                            animationData={sidelottie}
-                            loop={true}
-                            className="w-full h-full"
-                        />
+                    <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-50 to-purple-50 items-center justify-center p-8">
+                        <div className="w-full h-full max-w-md">
+                            <Lottie
+                                animationData={sidelottie}
+                                loop={true}
+                                className="w-full h-full"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

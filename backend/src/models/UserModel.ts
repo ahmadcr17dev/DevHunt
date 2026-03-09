@@ -4,7 +4,7 @@ interface IUser extends Document {
     username: string,
     email: string,
     password: string,
-    role: "jobseeker" | "employer",
+    role: "jobseeker" | "employer" | "both",
     fullname: string,
     phone: string,
     gender: "male" | "female" | "custom",
@@ -38,7 +38,7 @@ const UserSchema = new Schema<IUser>(
         },
         role: {
             type: String,
-            enum: ["jobseeker", "employer"],
+            enum: ["jobseeker", "employer", "both"],
             default: "employer"
         },
         fullname: {
