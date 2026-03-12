@@ -330,7 +330,7 @@ const ProfileCompleted = () => {
                                 <div className="md:col-span-2">
                                     <button
                                         type="submit"
-                                        className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:from-indigo-700 hover:to-purple-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+                                        className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/30 hover:cursor-pointer hover:shadow-indigo-500/50 hover:from-indigo-700 hover:to-purple-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
                                     >
                                         <span>Save Profile</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

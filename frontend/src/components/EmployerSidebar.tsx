@@ -13,7 +13,7 @@ import { useAuth } from "../context/AuthContext";
 
 const navItems = [
     { name: "Overview", path: "/employer/dashboard", icon: FiHome },
-    { name: "Post a Job", path: "/postjob", icon: FiPlusSquare },
+    { name: "Post a Job", path: "/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
 ]
@@ -100,7 +100,7 @@ const EmployerSidebar = () => {
                 <div className="absolute bottom-0 w-full p-4 border-t border-slate-700">
                     <button
                         onClick={() => setShowConfirmPanel(true)}
-                        className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group"
+                        className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group hover:cursor-pointer"
                     >
                         <FiLogOut size={20} className="group-hover:rotate-180 transition-transform duration-300" />
                         <span className="font-medium">Logout</span>
@@ -124,13 +124,13 @@ const EmployerSidebar = () => {
                         <div className="flex justify-around gap-3">
                             <button
                                 onClick={ConfirmLogOut}
-                                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-rose-700 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300"
+                                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-rose-700 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:cursor-pointer"
                             >
                                 Yes, Logout
                             </button>
                             <button
                                 onClick={CancelLogOut}
-                                className="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300"
+                                className="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300 hover:cursor-pointer"
                             >
                                 Cancel
                             </button>
