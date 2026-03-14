@@ -7,19 +7,30 @@ export interface AuthRequest extends Request {
 }
 
 const Protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log("🔍 ALL COOKIES:", req.cookies);
+    console.log("🔍 TOKEN:", req.cookies?.token);
+
     try {
-        const token = req.cookies?.token || req.headers.authorization?.split("")[1];
+        const token = req.cookies?.token;
         if (!token) {
-            return res.status(401).json({ success: false, message: "Unauthorized. No token provided" });
+            return res.status(401).json({ success: false, message: "Unauthorized. No token provided." })
         }
-        const decode = jwt.verify(token, process.env.JWT_TOKEN!) as { _id: string };
-        const user = await UserModel.findById(decode._id).select("-password");
+
+        // 👇 BUG FIX: Login uses 'id', middleware was using decoded.id
+        const decoded = jwt.verify(token, process.env.JWT_TOKEN!) as { id: string; role: string };
+
+        // 👇 CHANGE THIS LINE:
+        const user = await UserModel.findById(decoded.id);
+        // WAS: decoded.id (but login signs { id: user._id })
+
         if (!user) {
-            return res.status(401).json({ success: false, message: "user not found" });
+            return res.status(401).json({ success: false, message: "User not found." })
         }
-        req.user = { _id: user._id.toString(), role: user.role };
-        next();
+
+        req.user = { _id: user._id.toString(), role: user.role }
+        next()
     } catch (error) {
+        console.log("❌ JWT ERROR:", error);  // 👈 ADD THIS
         res.status(401).json({ success: false, message: "Invalid or expired token." })
     }
 }

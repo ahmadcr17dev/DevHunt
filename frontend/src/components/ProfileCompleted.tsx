@@ -80,36 +80,31 @@ const ProfileCompleted = () => {
             const storedUser = localStorage.getItem("user");
             if (!storedUser) throw new Error("User not found");
 
-            const parsedUser = JSON.parse(storedUser);
+            // const parsedUser = JSON.parse(storedUser);
 
             const response = await fetch(import.meta.env.VITE_PROFILECOMPLETED_KEY, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-                body: JSON.stringify({
-                    userId: parsedUser._id,
-                    ...formData,
-                }),
+                credentials: "include",
+                body: JSON.stringify(formData),
             });
 
             const data = await response.json();
-
             if (!response.ok) throw new Error(data.message || "Profile update failed");
 
             setSuccess(data.message || "Profile completed successfully");
 
             // ✅ Use server-returned user if possible
-            const updatedUser = data.user ? { ...data.user, isProfileCompleted: true } : { ...parsedUser, ...formData, isProfileCompleted: true };
-
-            setUser(updatedUser);
-            localStorage.setItem("user", JSON.stringify(updatedUser));
+            // const updatedUser = data.user ? { ...data.user, isProfileCompleted: true } : { ...parsedUser, ...formData, isProfileCompleted: true };
+            setUser(data.user);
+            // localStorage.setItem("user", JSON.stringify(updatedUser));
 
             setTimeout(() => {
                 // Redirect after completion
-                if (updatedUser.role === "employer") {
-                    navigate("/dashboard");
+                if (data.user.role === "employer") {
+                    navigate("/employer");
                 } else {
                     navigate("/profile");
                 }

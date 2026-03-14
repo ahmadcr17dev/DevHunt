@@ -16,7 +16,6 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/createjob" element={<PostJob />} />
 
         {/* General Protected Route */}
         <Route element={<ProtectedRoute />}>
@@ -26,7 +25,9 @@ const App = () => {
 
         {/* Employer Protected Route */}
         <Route element={<EmployerProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/employer" element={<DashboardPage />}>
+            <Route path="createjob" element={<PostJob />} />
+          </Route>
         </Route>
 
         {/* Optional: Catch-all redirect to login */}

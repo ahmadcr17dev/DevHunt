@@ -35,6 +35,7 @@ const PostJob = () => {
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState<FieldError[]>([])
     const [globalError, setGlobalError] = useState("")
+    const [success, setSuccess] = useState<string | null>(null);
 
     const [formData, setFormData] = useState<JobFormData>({
         jobTitle: "",
@@ -71,16 +72,38 @@ const PostJob = () => {
         setLoading(true)
         setErrors([])
         setGlobalError("")
+        setSuccess(null)
 
         try {
-            await axios.post("/api/jobs", {
+            const response = await axios.post(import.meta.env.VITE_CREATE_JOB_KEY as string, {
                 ...formData,
                 jobSkills: formData.jobSkills.split(",").map((s) => s.trim()).filter(Boolean),
                 minSalary: Number(formData.minSalary),
                 maxSalary: Number(formData.maxSalary),
                 expireAt: new Date(formData.expireAt).toISOString(),
+            }, {
+                withCredentials: true
             })
-            navigate("/employer/jobs", { replace: true })
+            setTimeout(() => {
+                setSuccess(response.data.message);
+            }, 1500)
+            setFormData({
+                jobTitle: "",
+                companyName: "",
+                companyLocation: "",
+                jobType: "Full Time",
+                jobLocation: "",
+                jobLocationType: "Onsite",
+                jobDescription: "",
+                jobResponsibilities: "",
+                jobRequirements: "",
+                jobSkills: "",
+                jobCategory: "",
+                minSalary: "",
+                maxSalary: "",
+                salaryCurrency: "USD",
+                expireAt: "",
+            })
         } catch (err: any) {
             if (err.response?.data?.errors) {
                 setErrors(err.response.data.errors)
@@ -162,7 +185,7 @@ const PostJob = () => {
                                 </Field>
                             </div>
 
-                            <Field label="Job Category" error={getFieldError("jobcategory")}>
+                            <Field label="Job Category" error={getFieldError("jobCategory")}>
                                 <select
                                     name="jobCategory"
                                     value={formData.jobCategory}
@@ -336,6 +359,13 @@ const PostJob = () => {
                                 />
                             </Field>
                         </Section>
+
+                        {/* {Success Messages */}
+                        {success && (
+                            <div className="md:col-span-2 p-4 bg-green-50 border border-green-200 rounded-xl">
+                                <p className="text-green-600 text-sm font-medium">{success}</p>
+                            </div>
+                        )}
 
                         {/* Action Buttons */}
                         <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">

@@ -7,19 +7,25 @@ import dotenv from "dotenv";
 import UserRouter from "./routes/UserRoute";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import JobRouter from "./routes/JobRoute";
 
 const PORT = process.env.PORT;
 const app = express();
 dotenv.config();
 
 // call database connection function
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 ConnectDatabase();
 
 // call User Routes
 app.use("/api/auth", UserRouter);
+// call Job Routes
+app.use("/api/job", JobRouter);
 
 // listen to port
 app.listen(PORT, () => {

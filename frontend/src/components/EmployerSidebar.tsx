@@ -13,7 +13,7 @@ import { useAuth } from "../context/AuthContext";
 
 const navItems = [
     { name: "Overview", path: "/employer/dashboard", icon: FiHome },
-    { name: "Post a Job", path: "/createjob", icon: FiPlusSquare },
+    { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
 ]

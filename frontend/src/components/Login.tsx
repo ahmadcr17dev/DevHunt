@@ -43,7 +43,7 @@ const Login = () => {
                 if (!loggedInuser.isProfileCompleted) {
                     navigate("/profilecompleted");
                 } else if (loggedInuser.role === "employer") {
-                    navigate("/dashboard");
+                    navigate("/employer");
                 } else {
                     navigate("/profile")
                 }

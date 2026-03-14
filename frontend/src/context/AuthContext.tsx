@@ -50,21 +50,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
-
-        if (storedUser && token) {
+        const fetchUser = async () => {
             try {
-                const parsedUser = JSON.parse(storedUser);
-                setUser(parsedUser);
-                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            } catch (err) {
-                console.error(err);
-                localStorage.removeItem("user");
-                localStorage.removeItem("token");
+                const res = await axios.get(
+                    import.meta.env.VITE_PROFILE_KEY as string,
+                    { withCredentials: true }
+                );
+                setUser(res.data.user);
+            } catch (error) {
+                setUser(null);
+            } finally {
+                setLoadingUser(false);
             }
-        }
-        setLoadingUser(false); // ✅ finished loading
+        };
+        fetchUser();
     }, []);
 
     // Register function
@@ -95,23 +94,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSuccess(null);
 
         try {
-            const response = await axios.post(import.meta.env.VITE_LOGIN_KEY as string, {
-                username, password
-            });
-
-            const { token, user } = response.data as {
-                token: string;
-                user: User;
-            };
-
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
+            const response = await axios.post(
+                import.meta.env.VITE_LOGIN_KEY as string,
+                { username, password },
+                { withCredentials: true }
+            );
             setSuccess(response.data.message);
-            setUser(user);
-
-            return user; // ✅ NEVER null
+            setUser(response.data.user);
+            return response.data.user;
         } catch (err: any) {
             const message = err.response?.data?.message;
             setError(message);
@@ -123,11 +113,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // logout fuction
     const logout = async () => {
         try {
-            await axios.post(import.meta.env.VITE_LOGOUT_KEY);
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            delete axios.defaults.headers.common["Authorization"];
-            setUser(null);
+            await axios.post(import.meta.env.VITE_LOGOUT_KEY as string,
+                {},
+                {
+                    withCredentials: true
+                });
         } catch (error) {
             console.error("Logout failed: ", error);
         }

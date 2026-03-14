@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserModel from "../models/UserModel";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
+import { AuthRequest } from "../middlewares/AuthMiddleware";
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -76,7 +77,7 @@ const login = async (req: Request, res: Response) => {
         if (username.length < 7) {
             return res.status(400).json({ success: false, message: "username must be greater than 6" });
         }
-        
+
         // check username is registered
         const user = await UserModel.findOne({ username });
         if (!user) {
@@ -98,6 +99,14 @@ const login = async (req: Request, res: Response) => {
             process.env.JWT_TOKEN!, { expiresIn: "7d" }
         )
 
+        // send and store cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,           // false for localhost
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+
         // send response on login
         res.status(200).json({
             success: true,
@@ -118,13 +127,12 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-const logout = async (res: Response) => {
+const logout = async (req: Request, res: Response) => {
     try {
         res.clearCookie("token", {
             httpOnly: true,
             sameSite: "lax",
-            secure: false,
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            secure: false
         });
         res.status(200).json({ success: true, message: "LogOut Successfull" });
     } catch (error) {
@@ -133,19 +141,19 @@ const logout = async (res: Response) => {
     }
 }
 
-// function for profile completion
-const ProfileCompleted = async (req: Request, res: Response) => {
+const ProfileCompleted = async (req: AuthRequest, res: Response) => {
     try {
-        // Get userId from request body (since we don't have auth middleware)
-        const { userId, username, fullname, phone, gender, role, location, domain, bio } = req.body;
+        // Destructure the form data
+        const { username, fullname, phone, gender, role, location, domain, bio } = req.body;
 
-        if (!userId) {
-            return res.status(400).json({ success: false, message: "User ID is required" });
+        // ✅ Use req.user._id from cookie (Protect middleware must run before this)
+        if (!req.user?._id) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
-        // Update user data
+        // Update the logged-in user's profile
         const user = await UserModel.findByIdAndUpdate(
-            userId,
+            req.user._id,
             {
                 username,
                 fullname,
@@ -167,47 +175,34 @@ const ProfileCompleted = async (req: Request, res: Response) => {
         return res.status(200).json({
             success: true,
             message: "Profile Completed Successfully",
-            user
+            user, // return updated user
         });
     } catch (error) {
         console.error("ProfileCompleted Error:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
-const profileData = async (req: Request, res: Response) => {
+const profileData = async (req: AuthRequest, res: Response) => {
     try {
-        const { userId } = req.query;
-
-        if (!userId) {
-            return res.status(400).json({
-                success: false,
-                message: "User ID is required",
-            });
+        // ✅ Get user ID from the cookie middleware
+        if (!req.user?._id) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
-        const user = await UserModel.findById(userId).select("-password");
+        const user = await UserModel.findById(req.user._id).select("-password");
 
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found",
-            });
+            return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             user,
         });
     } catch (error) {
         console.error("Get profile error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error",
-        });
+        return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
 
