@@ -122,7 +122,7 @@ const JobSchema = new Schema<IJob>(
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
-        },
+        }
     },
     {
         timestamps: true,

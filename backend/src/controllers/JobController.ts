@@ -27,51 +27,38 @@ const CreateJob = async (req: AuthRequest, res: Response) => {
 
 const GetAllJobs = async (req: AuthRequest, res: Response) => {
     try {
-        const {
-            page = 1,
-            limit = 10,
-            search,
-            jobType,
-            jobLocationType,
-            jobCategory,
-            status = "active"
-        } = req.query;
+        // Default to get ALL jobs without filters
+        const query: Record<string, unknown> = { status: "active" };
 
-        const query: Record<string, unknown> = { status }
+        // Optional filters (won't break if not provided)
+        const { search, jobType, jobLocationType, jobCategory } = req.query;
 
         if (search) {
             query.$or = [
-                { jobTitle: { $regex: search, $options: "i" } },
-                { companyName: { $regex: search, $option: "i" } },
-                { jobLocation: { $regex: search, $option: "i" } }
-            ]
+                { jobTitle: { $regex: search as string, $options: "i" } }, // ✅ FIXED: $options
+                { companyName: { $regex: search as string, $options: "i" } }, // ✅ FIXED: $options
+                { jobLocation: { $regex: search as string, $options: "i" } }  // ✅ FIXED: $options
+            ];
         }
-        if (jobType) {
-            query.jobType = jobType;
-        }
-        if (jobLocationType) {
-            query.jobLocationType = jobLocationType;
-        }
-        if (jobCategory) {
-            query.jobCategory = jobCategory;
-        }
-        const total = await JobModel.countDocuments(query);
+        if (jobType) query.jobType = jobType;
+        if (jobLocationType) query.jobLocationType = jobLocationType;
+        if (jobCategory) query.jobCategory = jobCategory;
+
+        // Get ALL jobs (no pagination for overview)
         const jobs = await JobModel.find(query)
-            .populate("employed", "name email")
-            .sort({ createdAt: -1 })
-            .skip((+page - 1) * +limit)
-            .limit(+limit)
+            .populate("employer", "name email")
+            .sort({ createdAt: -1 });
 
         res.status(200).json({
-            total,
-            page: +page,
-            pages: Math.ceil(total / +limit),
-            jobs
-        })
+            success: true,
+            jobs, // Frontend expects just 'jobs' array
+            total: jobs.length
+        });
     } catch (err: any) {
+        console.error('GetAllJobs Error:', err); // ✅ Add logging
         HandleMongooseError(err, res);
     }
-}
+};
 
 const GetMyJobs = async (req: AuthRequest, res: Response) => {
     try {

@@ -8,8 +8,21 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import EmployerProtectedRoute from "./components/EmployerProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import PostJob from "./components/PostJob";
+import { useEffect } from "react";
+import JobsOverview from "./components/JobsOverview";
 
 const App = () => {
+
+  // cursor spotlight function
+  useEffect(() => {
+    const HandleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty("--cursor-x", `${e.clientX}px`);
+      document.documentElement.style.setProperty("--cursor-y", `${e.clientY}px`);
+    }
+    window.addEventListener("mousemove", HandleMouseMove);
+    return () => window.removeEventListener("mousemove", HandleMouseMove);
+  }, [])
+
   return (
     <>
       <Routes>
@@ -27,6 +40,7 @@ const App = () => {
         <Route element={<EmployerProtectedRoute />}>
           <Route path="/employer" element={<DashboardPage />}>
             <Route path="createjob" element={<PostJob />} />
+            <Route path="getmyjobs" element={<JobsOverview />} />
           </Route>
         </Route>
 

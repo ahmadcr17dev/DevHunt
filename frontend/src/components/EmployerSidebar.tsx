@@ -12,7 +12,7 @@ import { useState } from "react"
 import { useAuth } from "../context/AuthContext";
 
 const navItems = [
-    { name: "Overview", path: "/employer/dashboard", icon: FiHome },
+    { name: "Overview", path: "/employer/getmyjobs", icon: FiHome },
     { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
@@ -45,7 +45,7 @@ const EmployerSidebar = () => {
             {/* Mobile Toggle */}
             <button
                 onClick={() => setOpen(true)}
-                className="md:hidden fixed top-4 left-4 z-50 text-white bg-slate-800 p-2 rounded-lg shadow-lg hover:bg-slate-700 transition-colors duration-200"
+                className="md:hidden fixed top-4 left-4 z-50 text-white bg-slate-800 p-2 rounded-lg shadow-lg hover:bg-slate-700 transition-colors duration-200 hover:cursor-pointer"
             >
                 <FiMenu size={24} />
             </button>

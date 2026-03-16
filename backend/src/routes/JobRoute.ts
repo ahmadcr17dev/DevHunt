@@ -7,10 +7,10 @@ const JobRouter = express.Router();
 // call job routes
 JobRouter.post("/createjob", Protect, EmployerOnly, CreateJob);
 JobRouter.get("/getalljobs", GetAllJobs);
-JobRouter.get("/getjobsbyid/:id", GetJobsByID);
-JobRouter.get("/getmyjobs", GetMyJobs);
+JobRouter.get("/getjobsbyid/:id", Protect, EmployerOnly, GetJobsByID);
+JobRouter.get("/getmyjobs", Protect, EmployerOnly, GetMyJobs);
 JobRouter.patch("/updatejob/:id", UpdateJob);
-JobRouter.delete("/deletejob/:id", DeleteJob);
+JobRouter.delete("/deletejob/:id", Protect, EmployerOnly, DeleteJob);
 JobRouter.patch("/togglejobstatus/:id", ToggleJobStatus);
 
 export default JobRouter;

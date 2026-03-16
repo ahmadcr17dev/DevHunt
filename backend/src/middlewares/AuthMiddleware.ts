@@ -7,8 +7,8 @@ export interface AuthRequest extends Request {
 }
 
 const Protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("🔍 ALL COOKIES:", req.cookies);
-    console.log("🔍 TOKEN:", req.cookies?.token);
+    // console.log("🔍 ALL COOKIES:", req.cookies);
+    // console.log("🔍 TOKEN:", req.cookies?.token);
 
     try {
         const token = req.cookies?.token;

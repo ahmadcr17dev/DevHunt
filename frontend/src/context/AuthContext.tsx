@@ -8,7 +8,7 @@ interface User {
     fullname: string;
     email: string;
     isProfileCompleted: boolean;
-    role: "jobseeker" | "employer" | "both";
+    role: "jobseeker" | "employer";
     phone: string;
     gender: "male" | "female" | "custom";
     location: string;

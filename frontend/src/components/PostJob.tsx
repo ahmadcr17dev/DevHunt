@@ -84,9 +84,8 @@ const PostJob = () => {
             }, {
                 withCredentials: true
             })
-            setTimeout(() => {
-                setSuccess(response.data.message);
-            }, 1500)
+            setSuccess(response.data.message)
+            setTimeout(() => setSuccess(""), 1500)
             setFormData({
                 jobTitle: "",
                 companyName: "",
@@ -107,6 +106,7 @@ const PostJob = () => {
         } catch (err: any) {
             if (err.response?.data?.errors) {
                 setErrors(err.response.data.errors)
+                setTimeout(() => setErrors([]), 1500)
             } else {
                 setGlobalError(err.response?.data?.message || "Something went wrong. Please try again.")
             }

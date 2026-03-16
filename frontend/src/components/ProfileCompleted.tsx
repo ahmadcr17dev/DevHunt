@@ -77,11 +77,6 @@ const ProfileCompleted = () => {
         setSuccess(null);
 
         try {
-            const storedUser = localStorage.getItem("user");
-            if (!storedUser) throw new Error("User not found");
-
-            // const parsedUser = JSON.parse(storedUser);
-
             const response = await fetch(import.meta.env.VITE_PROFILECOMPLETED_KEY, {
                 method: "PUT",
                 headers: {
@@ -97,10 +92,7 @@ const ProfileCompleted = () => {
             setSuccess(data.message || "Profile completed successfully");
 
             // ✅ Use server-returned user if possible
-            // const updatedUser = data.user ? { ...data.user, isProfileCompleted: true } : { ...parsedUser, ...formData, isProfileCompleted: true };
             setUser(data.user);
-            // localStorage.setItem("user", JSON.stringify(updatedUser));
-
             setTimeout(() => {
                 // Redirect after completion
                 if (data.user.role === "employer") {
@@ -243,7 +235,6 @@ const ProfileCompleted = () => {
                                     >
                                         <option value="jobseeker">Job Seeker</option>
                                         <option value="employer">Employer</option>
-                                        <option value="both">Both</option>
                                     </select>
                                 </div>
 
