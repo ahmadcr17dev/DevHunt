@@ -12,7 +12,7 @@ import { useState } from "react"
 import { useAuth } from "../context/AuthContext";
 
 const navItems = [
-    { name: "Overview", path: "/employer/getmyjobs", icon: FiHome },
+    { name: "Overview", path: "/employer", icon: FiHome },
     { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
@@ -37,6 +37,9 @@ const EmployerSidebar = () => {
 
     // Helper function to check if path is active
     const isActivePath = (path: string) => {
+        if(path === "/employer"){
+            return location.pathname === "/employer"
+        }
         return location.pathname === path || location.pathname.startsWith(path + "/");
     };
 

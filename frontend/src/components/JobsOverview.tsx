@@ -1,6 +1,6 @@
 // components/JobOverview.tsx
 import React, { useState, useEffect } from 'react';
-import { Trash2, MapPin, DollarSign, Clock, Briefcase, AlertCircle, RefreshCw } from 'lucide-react';
+import { Trash2, MapPin, CoinsIcon, Clock, Briefcase, AlertCircle, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
 interface Job {
@@ -8,7 +8,9 @@ interface Job {
     jobTitle: string;        // ✅ Changed from 'title'
     companyName: string;     // ✅ Changed from 'company'
     jobLocation: string;     // ✅ Changed from 'location'
-    salary?: string;
+    minSalary: string;
+    maxSalary: string;
+    salaryCurrency: string;
     jobType: 'Full-time' | 'Part-time' | 'Contract' | 'Remote';  // ✅ Changed from 'type'
     status: 'active' | 'closed';
     createdAt: string;
@@ -160,14 +162,16 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, isDeleting }) => {
         <div className="group bg-slate-800/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-500 hover:-translate-y-2 hover:border-blue-500/50 overflow-hidden">
             {/* Job Header */}
             <div className="p-4 sm:p-6">
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-0">
                     <div className="flex-1">
                         <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-blue-400 transition-all duration-300 mb-1">
                             {job.jobTitle.slice(0, 25) + "..."}
                         </h3>
-                        <p className="text-sm sm:text-base font-semibold text-slate-300 mb-1">{job.companyName}</p>
+                        <p className="text-sm sm:text-base font-semibold text-slate-300 mb-4">
+                            {job.companyName.slice(0, 25) + "..."}
+                        </p>
                         <div className="flex items-center text-slate-400">
-                            <MapPin className="h-4 w-4 mr-2 text-blue-400 flex-shrink-0" />
+                            <MapPin className="h-4 w-4 mr-2 text-blue-400" />
                             <span className="text-sm">{job.jobLocation}</span>
                         </div>
                     </div>
@@ -188,11 +192,16 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, isDeleting }) => {
                 </div>
 
                 {/* Job Details */}
-                <div className="space-y-2 mb-4">
-                    {job.salary && (
-                        <div className="flex items-center text-slate-300 bg-slate-700/50 px-3 py-2 rounded-xl">
-                            <DollarSign className="h-4 w-4 mr-2 text-green-400 flex-shrink-0" />
-                            <span className="text-sm font-semibold">{job.salary}</span>
+                <div className="space-y-1 mb-4">
+                    {(job.minSalary && job.maxSalary) && (
+                        <div className="flex items-center text-slate-300">
+                            <CoinsIcon className="h-4 w-4 mr-2 text-green-400 flex-shrink-0" />
+                            <div>
+                                <span className="text-sm font-semibold">{job.minSalary}</span>
+                                <span> - </span>
+                                <span className="text-sm font-semibold">{job.maxSalary}</span>
+                                <span className="text-sm font-semibold text-white">{" " + job.salaryCurrency}</span>
+                            </div>
                         </div>
                     )}
                     <div className="flex items-center text-slate-400">

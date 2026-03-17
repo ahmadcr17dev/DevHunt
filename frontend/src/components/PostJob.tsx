@@ -1,6 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import worldCurrencies from "world-currencies"
 
 interface JobFormData {
     jobTitle: string
@@ -66,6 +67,19 @@ const PostJob = () => {
         // clear field error on change
         setErrors((prev) => prev.filter((e) => e.field !== name))
     }
+
+    const currencyOptions = Object.values(worldCurrencies).map((currency: any) => {
+        const countryCode = currency.iso.code.slice(0, 2).toUpperCase()
+        const flag = countryCode
+            .split("")
+            .map((c: string) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
+            .join("")
+
+        return {
+            value: currency.iso.code,
+            label: `${flag} — ${currency.iso.code}`,
+        }
+    })
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -287,8 +301,8 @@ const PostJob = () => {
                                         value={formData.salaryCurrency}
                                         onChange={handleChange}
                                     >
-                                        {["USD", "EUR", "GBP", "PKR", "INR", "AED"].map((c) => (
-                                            <option key={c} value={c}>{c}</option>
+                                        {currencyOptions.map(({ value, label }) => (
+                                            <option key={value} value={value}>{label}</option>
                                         ))}
                                     </select>
                                 </Field>

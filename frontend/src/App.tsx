@@ -39,8 +39,9 @@ const App = () => {
         {/* Employer Protected Route */}
         <Route element={<EmployerProtectedRoute />}>
           <Route path="/employer" element={<DashboardPage />}>
-            <Route path="createjob" element={<PostJob />} />
+            <Route index element={<JobsOverview />} />
             <Route path="getmyjobs" element={<JobsOverview />} />
+            <Route path="createjob" element={<PostJob />} />
           </Route>
         </Route>
 
