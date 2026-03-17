@@ -7,6 +7,7 @@ import {
     FiBarChart2,
     FiLogOut,
     FiMenu,
+    FiUser,
 } from "react-icons/fi"
 import { useState } from "react"
 import { useAuth } from "../context/AuthContext";
@@ -16,6 +17,7 @@ const navItems = [
     { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
+    {name: "My Account", path: "/employer/myaccount", icon: FiUser}
 ]
 
 const EmployerSidebar = () => {

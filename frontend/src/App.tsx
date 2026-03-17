@@ -10,6 +10,7 @@ import DashboardPage from "./pages/DashboardPage";
 import PostJob from "./components/PostJob";
 import { useEffect } from "react";
 import JobsOverview from "./components/JobsOverview";
+import EmployerAccount from "./components/EmployerAccount";
 
 const App = () => {
 
@@ -42,6 +43,7 @@ const App = () => {
             <Route index element={<JobsOverview />} />
             <Route path="getmyjobs" element={<JobsOverview />} />
             <Route path="createjob" element={<PostJob />} />
+            <Route path="myaccount" element={<EmployerAccount />} />
           </Route>
         </Route>
 
