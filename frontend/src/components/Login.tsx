@@ -45,7 +45,7 @@ const Login = () => {
                 } else if (loggedInuser.role === "employer") {
                     navigate("/employer");
                 } else {
-                    navigate("/profile")
+                    navigate("/jobspage")
                 }
             }, 2500)
         } catch (err: any) {

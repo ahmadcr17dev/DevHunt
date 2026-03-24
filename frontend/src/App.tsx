@@ -11,6 +11,8 @@ import PostJob from "./components/PostJob";
 import { useEffect } from "react";
 import JobsOverview from "./components/JobsOverview";
 import EmployerAccount from "./components/EmployerAccount";
+import UpdateJobs from "./components/UpdateJobs";
+import JobPage from "./components/Jobs";
 
 const App = () => {
 
@@ -30,6 +32,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/jobspage" element={<JobPage />} />
 
         {/* General Protected Route */}
         <Route element={<ProtectedRoute />}>
@@ -43,6 +46,7 @@ const App = () => {
             <Route index element={<JobsOverview />} />
             <Route path="getmyjobs" element={<JobsOverview />} />
             <Route path="createjob" element={<PostJob />} />
+            <Route path="updatejobs" element={<UpdateJobs />} />
             <Route path="myaccount" element={<EmployerAccount />} />
           </Route>
         </Route>

@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 const navItems = [
     { name: "Overview", path: "/employer", icon: FiHome },
     { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
-    { name: "Update Jobs", path: "/employer/jobs", icon: FiEdit },
+    { name: "Update Jobs", path: "/employer/updatejobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
     {name: "My Account", path: "/employer/myaccount", icon: FiUser}
 ]

@@ -98,7 +98,7 @@ const ProfileCompleted = () => {
                 if (data.user.role === "employer") {
                     navigate("/employer");
                 } else {
-                    navigate("/profile");
+                    navigate("/jobspage");
                 }
             }, 1500);
 
