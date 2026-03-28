@@ -44,7 +44,7 @@ const JobPage = () => {
         salaryMin: "",
         salaryMax: "",
     })
-    const [stats, setStats] = useState({ total: 0, today: 0 })
+    const [stats, setStats] = useState(0)
 
     // Filters data
     const categories = [
@@ -71,7 +71,7 @@ const JobPage = () => {
             )
 
             setJobs(res.data.jobs || [])
-            setStats(res.data.stats || { total: 0, today: 0 })
+            setStats(res.data.total)
         } catch (error) {
             console.error("Failed to fetch jobs:", error)
         } finally {
@@ -117,7 +117,7 @@ const JobPage = () => {
             <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
                 {/* Decorative elements */}
                 <div className="inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute left-1/4 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
+                    <div className="left-1/4 w-72 h-18 bg-blue-500/5 rounded-full blur-3xl"></div>
                     <div className="absolute right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
                 </div>
 
@@ -129,36 +129,39 @@ const JobPage = () => {
                             Find Your Dream Job
                         </h1>
                         <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-                            {stats.total} jobs available. {stats.today} posted today.
+                            {stats} jobs available
                         </p>
                     </div>
 
                     {/* Search & Filters */}
-                    <div className="grid lg:grid-cols-4 gap-6 mb-8">
+                    <div className="grid lg:grid-cols-3 gap-6 mb-8">
 
                         {/* Main Search */}
                         <div className="lg:col-span-2">
                             <div className="relative group">
-                                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400 transition-colors" size={20} />
+                                <FiSearch
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400 transition-colors"
+                                    size={20}
+                                />
                                 <input
                                     type="text"
                                     placeholder="Search job titles, companies, skills..."
                                     value={filters.search}
                                     onChange={(e) => updateFilter("search", e.target.value)}
-                                    className="w-full bg-slate-800/50 border border-slate-700 rounded-2xl pl-12 pr-4 py-4 text-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 shadow-lg hover:shadow-blue-500/10"
+                                    className="w-full bg-slate-800/50 border border-slate-700 rounded-2xl pl-12 pr-4 py-2 text-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 shadow-lg hover:shadow-blue-500/10"
                                 />
                             </div>
                         </div>
 
                         {/* Quick Filters */}
                         <div className="flex gap-3 lg:justify-end">
-                            <button className="px-4 py-3 bg-slate-800/50 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 flex items-center gap-2 hover:cursor-pointer">
+                            <button className="px-10 py-2 bg-slate-800/50 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 flex items-center gap-2 hover:cursor-pointer">
                                 <FiFilter size={16} />
                                 Filters
                             </button>
                             <button
                                 onClick={clearFilters}
-                                className="px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:-translate-y-0.5"
+                                className="px-10 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 hover:-translate-y-0.5 hover:cursor-pointer"
                             >
                                 Clear All
                             </button>
@@ -263,7 +266,7 @@ const JobPage = () => {
                                     <p className="text-slate-400 mb-6">Try adjusting your filters or search terms</p>
                                     <button
                                         onClick={clearFilters}
-                                        className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold transition-all"
+                                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-all"
                                     >
                                         Clear Filters
                                     </button>
@@ -382,9 +385,9 @@ const JobCard = ({ job, onApply }: { job: Job; onApply: () => void }) => {
                 <div className="flex flex-col items-end gap-2 ml-4 flex-shrink-0">
                     <button
                         onClick={onApply}
-                        className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition-all duration-200 group-hover:cursor-pointer"
+                        className="px-10 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white flex items-center justify-center shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition-all duration-200 group-hover:cursor-pointer"
                     >
-                        Apply
+                        Apply Now
                     </button>
                     <button className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all group-hover:cursor-pointer">
                         <FiHeart size={16} />

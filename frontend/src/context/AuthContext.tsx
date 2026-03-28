@@ -51,6 +51,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
+            console.log('🔍 AuthContext: Starting fetchUser...');
+            console.log('🔍 VITE_PROFILE_KEY:', import.meta.env.VITE_PROFILE_KEY);
             try {
                 const res = await axios.get(
                     import.meta.env.VITE_PROFILE_KEY as string,

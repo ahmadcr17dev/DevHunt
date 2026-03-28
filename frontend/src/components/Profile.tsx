@@ -4,6 +4,7 @@ import { CiEdit } from "react-icons/ci";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useAuth } from "../context/AuthContext";
 import Loader from "./Loader";
+import axios from "axios";
 
 const Profile = () => {
     const { user: contextUser, logout } = useAuth();
@@ -26,15 +27,13 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await fetch(
-                    `${import.meta.env.VITE_PROFILE_KEY}?userId=${contextUser._id}`
+                const response = await axios.get(
+                    `${import.meta.env.VITE_PROFILE_KEY}?userId=${contextUser._id}`,
+                    {
+                        withCredentials: true
+                    }
                 );
-                const data = await response.json();
-                if (!response.ok) {
-                    setError(data.message || "Failed to fetch profile");
-                    return;
-                }
-                setUser(data.user); // populate local state with latest backend data
+                setUser(response.data.user); // populate local state with latest backend data
             } catch (err) {
                 setError("Something went wrong");
             }

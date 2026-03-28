@@ -27,35 +27,42 @@ const CreateJob = async (req: AuthRequest, res: Response) => {
 
 const GetAllJobs = async (req: AuthRequest, res: Response) => {
     try {
-        // Default to get ALL jobs without filters
         const query: Record<string, unknown> = { status: "active" };
-
-        // Optional filters (won't break if not provided)
         const { search, jobType, jobLocationType, jobCategory } = req.query;
 
+        // Build the same query for both count and find
         if (search) {
             query.$or = [
-                { jobTitle: { $regex: search as string, $options: "i" } }, // ✅ FIXED: $options
-                { companyName: { $regex: search as string, $options: "i" } }, // ✅ FIXED: $options
-                { jobLocation: { $regex: search as string, $options: "i" } }  // ✅ FIXED: $options
+                { jobTitle: { $regex: search as string, $options: "i" } },
+                { companyName: { $regex: search as string, $options: "i" } },
+                { jobLocation: { $regex: search as string, $options: "i" } }
             ];
         }
         if (jobType) query.jobType = jobType;
         if (jobLocationType) query.jobLocationType = jobLocationType;
         if (jobCategory) query.jobCategory = jobCategory;
 
-        // Get ALL jobs (no pagination for overview)
-        const jobs = await JobModel.find(query)
-            .populate("employer", "name email")
-            .sort({ createdAt: -1 });
+        // 🔥 EFFICIENT: Get count and jobs in parallel
+        const [jobs, total] = await Promise.all([
+            JobModel.find(query)
+                .populate("employer", "name email")
+                .sort({ createdAt: -1 }),
+            JobModel.countDocuments(query) // ✅ Fast count without fetching documents
+        ]);
 
         res.status(200).json({
             success: true,
-            jobs, // Frontend expects just 'jobs' array
-            total: jobs.length
+            jobs,
+            total, // ✅ Accurate total count
+            filtersApplied: {
+                search: search || null,
+                jobType: jobType || null,
+                jobLocationType: jobLocationType || null,
+                jobCategory: jobCategory || null
+            }
         });
     } catch (err: any) {
-        console.error('GetAllJobs Error:', err); // ✅ Add logging
+        console.error('GetAllJobs Error:', err);
         HandleMongooseError(err, res);
     }
 };

@@ -20,7 +20,7 @@ const Protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
         const decoded = jwt.verify(token, process.env.JWT_TOKEN!) as { id: string; role: string };
 
         // 👇 CHANGE THIS LINE:
-        const user = await UserModel.findById(decoded.id);
+        const user = await UserModel.findById(decoded.id).select("-password");
         // WAS: decoded.id (but login signs { id: user._id })
 
         if (!user) {
