@@ -18,12 +18,10 @@ const Register = () => {
     });
     const [showPassword, setShowPassword] = useState(false);
 
-    // clear any message
     useEffect(() => {
         ClearMessage();
     }, [])
 
-    // show loader on page loads
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
@@ -31,12 +29,10 @@ const Register = () => {
         return () => clearTimeout(timer);
     }, [])
 
-    // change input values
     const HandleChange = (e: any) => {
         SetFormData({ ...FormData, [e.target.name]: e.target.value });
     }
 
-    // Submit Register data function
     const HandleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await register(FormData);
@@ -51,16 +47,16 @@ const Register = () => {
             {loading && <Loader />}
 
             {/* Background with gradient */}
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center px-4 py-8">
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4 py-8">
 
                 {/* Decorative background elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
                 </div>
 
                 {/* Main Card */}
-                <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex overflow-hidden relative z-10">
+                <div className="w-full max-w-5xl bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl flex overflow-hidden relative z-10">
 
                     {/* Left Section - Form */}
                     <div className="w-full lg:w-1/2 p-6 sm:p-10 lg:p-12">
@@ -75,10 +71,10 @@ const Register = () => {
 
                         {/* Content */}
                         <div className="my-6 text-center">
-                            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
-                                Register First Than Explore
+                            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">
+                                Register Than Explore
                             </h1>
-                            <p className="text-base text-gray-600">
+                            <p className="text-base text-slate-400">
                                 Create your account to get started
                             </p>
 
@@ -86,13 +82,13 @@ const Register = () => {
                             <form className="max-w-sm mx-auto mt-10 space-y-5" onSubmit={HandleSubmit}>
                                 {/* Username Input */}
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                    <label className="block text-sm font-semibold text-slate-300 text-left">
                                         Username
                                     </label>
                                     <input
                                         type="text"
                                         placeholder="Enter your username"
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                                         value={FormData.username}
                                         onChange={HandleChange}
                                         name="username"
@@ -103,13 +99,13 @@ const Register = () => {
 
                                 {/* Email Input */}
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                    <label className="block text-sm font-semibold text-slate-300 text-left">
                                         Email
                                     </label>
                                     <input
                                         type="email"
                                         placeholder="Enter your email"
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                        className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                                         value={FormData.email}
                                         onChange={HandleChange}
                                         name="email"
@@ -118,24 +114,23 @@ const Register = () => {
 
                                 {/* Password Input */}
                                 <div className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700 text-left">
+                                    <label className="block text-sm font-semibold text-slate-300 text-left">
                                         Password
                                     </label>
                                     <div className="relative">
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             placeholder="Enter your password"
-                                            className="w-full px-4 py-3 pr-12 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-300"
+                                            className="w-full px-4 py-3 pr-12 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                                             value={FormData.password}
                                             onChange={HandleChange}
                                             name="password"
                                             minLength={8}
                                         />
-
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(prev => !prev)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 focus:outline-none transition-colors duration-200"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none transition-colors duration-200"
                                             aria-label={showPassword ? "Hide password" : "Show password"}
                                         >
                                             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
@@ -145,16 +140,16 @@ const Register = () => {
 
                                 {/* Error & Success Messages */}
                                 {error && (
-                                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                                        <p className="text-red-600 text-sm font-medium">
+                                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                                        <p className="text-red-400 text-sm font-medium">
                                             {error}
                                         </p>
                                     </div>
                                 )}
 
                                 {success && (
-                                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                                        <p className="text-green-600 text-sm font-medium">
+                                    <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                                        <p className="text-green-400 text-sm font-medium">
                                             {success}
                                         </p>
                                     </div>
@@ -163,20 +158,20 @@ const Register = () => {
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    className="w-full py-3.5 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg shadow-indigo-500/30 hover:cursor-pointer hover:shadow-indigo-500/50 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+                                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 hover:cursor-pointer"
                                 >
                                     <span>Sign Up</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
                                 </button>
 
                                 {/* Sign In Link */}
-                                <p className="text-sm text-gray-600 text-center mt-6">
+                                <p className="text-sm text-slate-400 text-center mt-6">
                                     Already have an account?{" "}
                                     <NavLink
                                         to="/login"
-                                        className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition-colors duration-200"
+                                        className="text-blue-400 font-semibold hover:text-blue-300 hover:underline transition-colors duration-200"
                                     >
                                         Sign In
                                     </NavLink>
@@ -186,12 +181,12 @@ const Register = () => {
                     </div>
 
                     {/* Right Illustration */}
-                    <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-50 to-purple-50 items-center justify-center p-8">
+                    <div className="hidden lg:flex w-1/2 bg-slate-800/30 border-l border-slate-700/50 items-center justify-center p-8">
                         <div className="w-full h-full max-w-md">
                             <Lottie
                                 animationData={sidelottie}
                                 loop={true}
-                                className="w-full h-full"
+                                className="w-full h-full invert"
                             />
                         </div>
                     </div>
