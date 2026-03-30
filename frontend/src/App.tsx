@@ -6,7 +6,6 @@ import ProfileCompleted from "./components/ProfileCompleted";
 import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EmployerProtectedRoute from "./components/EmployerProtectedRoute";
-import AuthGaurd from "./components/AuthGaurd";
 import DashboardPage from "./pages/DashboardPage";
 import PostJob from "./components/PostJob";
 import { useEffect } from "react";
@@ -14,6 +13,7 @@ import JobsOverview from "./components/JobsOverview";
 import EmployerAccount from "./components/EmployerAccount";
 import UpdateJobs from "./components/UpdateJobs";
 import JobPage from "./components/Jobs";
+import JobDetails from "./components/JobDetails";
 
 const App = () => {
 
@@ -31,17 +31,10 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={
-          <AuthGaurd>
-            <Login />
-          </AuthGaurd>
-        } />
-        <Route path="/register" element={
-          <AuthGaurd>
-            <Register />
-          </AuthGaurd>
-        } />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/jobspage" element={<JobPage />} />
+        <Route path="/jobdetail/:jobId" element={<JobDetails />} />
 
         {/* General Protected Route */}
         <Route element={<ProtectedRoute />}>

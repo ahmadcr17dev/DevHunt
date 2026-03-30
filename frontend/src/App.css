@@ -4,3 +4,30 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+
+/* globals.css - ADD THIS */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-fill-color: rgb(31 41 55 / 0.5) !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  caret-color: #ffffff !important;
+  box-shadow: 0 0 0px 1000px rgb(31 41 55 / 0.5) inset !important;
+}
+
+input:-webkit-autofill ~ label {
+  color: #f8fafc !important;
+}
+
+/* Text selection */
+input::selection {
+  background: rgb(59 130 246 / 0.5) !important;
+  color: #ffffff !important;
+}
+
+input::-moz-selection {
+  background: rgb(59 130 246 / 0.5) !important;
+  color: #ffffff !important;
+}

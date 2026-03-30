@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate, Navigate } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { AiOutlineLogout } from "react-icons/ai";
+import { FiLogOut } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import Loader from "./Loader";
 import axios from "axios";
@@ -178,27 +179,35 @@ const Profile = () => {
 
                 {/* Confirmation Panel */}
                 {showConfirmPanel && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md">
-                        <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl p-8 w-96 text-center transform transition-all duration-300 scale-100">
-                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/20 border-2 border-red-500/30 flex items-center justify-center">
-                                <AiOutlineLogout className="w-10 h-10 text-red-400" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4">
+                        <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100 animate-in fade-in zoom-in duration-200">
+
+                            {/* Icon */}
+                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border-2 border-red-500/20 flex items-center justify-center backdrop-blur-sm">
+                                <FiLogOut className="w-10 h-10 text-red-400" />
                             </div>
+
+                            {/* Title */}
                             <h2 className="text-2xl font-bold mb-3 text-white">
                                 Are you sure?
                             </h2>
-                            <p className="text-slate-400 mb-8 text-lg leading-relaxed">
+
+                            {/* Subtitle */}
+                            <p className="text-lg text-slate-300 mb-8 leading-relaxed max-w-sm mx-auto">
                                 You will be logged out of your account.
                             </p>
-                            <div className="flex justify-center gap-4">
+
+                            {/* Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button
                                     onClick={confirmLogout}
-                                    className="px-8 py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300 border border-slate-700/50"
+                                    className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-2xl font-semibold shadow-xl shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 border border-red-500/20 hover:cursor-pointer"
                                 >
                                     Yes, Logout
                                 </button>
                                 <button
                                     onClick={cancelLogout}
-                                    className="px-8 py-3 bg-slate-700/50 text-slate-300 rounded-xl font-semibold hover:bg-slate-700 border border-slate-600/50 hover:text-white transition-all duration-300"
+                                    className="flex-1 px-6 py-4 bg-slate-700/50 text-slate-300 rounded-2xl font-semibold border border-slate-600/50 hover:bg-slate-700 hover:text-white hover:border-slate-500/50 transition-all duration-300 hover:cursor-pointer backdrop-blur-sm"
                                 >
                                     Cancel
                                 </button>

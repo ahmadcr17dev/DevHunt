@@ -17,7 +17,7 @@ const navItems = [
     { name: "Post a Job", path: "/employer/createjob", icon: FiPlusSquare },
     { name: "Update Jobs", path: "/employer/updatejobs", icon: FiEdit },
     { name: "Statistics", path: "/employer/statistics", icon: FiBarChart2 },
-    {name: "My Account", path: "/employer/myaccount", icon: FiUser}
+    { name: "My Account", path: "/employer/myaccount", icon: FiUser }
 ]
 
 const EmployerSidebar = () => {
@@ -39,7 +39,7 @@ const EmployerSidebar = () => {
 
     // Helper function to check if path is active
     const isActivePath = (path: string) => {
-        if(path === "/employer"){
+        if (path === "/employer") {
             return location.pathname === "/employer"
         }
         return location.pathname === path || location.pathname.startsWith(path + "/");
@@ -115,27 +115,35 @@ const EmployerSidebar = () => {
 
             {/* Confirmation Panel */}
             {showConfirmPanel && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 text-center transform transition-all duration-300 scale-100 animate-fade-in">
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
-                            <FiLogOut className="w-8 h-8 text-red-600" />
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4">
+                    <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100 animate-in fade-in zoom-in duration-200">
+
+                        {/* Icon */}
+                        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border-2 border-red-500/20 flex items-center justify-center backdrop-blur-sm">
+                            <FiLogOut className="w-10 h-10 text-red-400" />
                         </div>
-                        <h2 className="text-lg font-bold mb-2 text-gray-900">
+
+                        {/* Title */}
+                        <h2 className="text-2xl font-bold mb-3 text-white">
                             Are you sure?
                         </h2>
-                        <p className="text-sm text-gray-500 mb-6">
+
+                        {/* Subtitle */}
+                        <p className="text-lg text-slate-300 mb-8 leading-relaxed max-w-sm mx-auto">
                             You will be logged out of your account.
                         </p>
-                        <div className="flex justify-around gap-3">
+
+                        {/* Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button
                                 onClick={ConfirmLogOut}
-                                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl font-semibold hover:from-red-700 hover:to-rose-700 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:cursor-pointer"
+                                className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-2xl font-semibold shadow-xl shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 border border-red-500/20 hover:cursor-pointer"
                             >
                                 Yes, Logout
                             </button>
                             <button
                                 onClick={CancelLogOut}
-                                className="px-5 py-2.5 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300 hover:cursor-pointer"
+                                className="flex-1 px-6 py-4 bg-slate-700/50 text-slate-300 rounded-2xl font-semibold border border-slate-600/50 hover:bg-slate-700 hover:text-white hover:border-slate-500/50 transition-all duration-300 hover:cursor-pointer backdrop-blur-sm"
                             >
                                 Cancel
                             </button>

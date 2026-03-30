@@ -8,7 +8,6 @@ import {
     FiFilter,
     FiClock,
     FiBookmark,
-    FiHeart,
 } from "react-icons/fi"
 import Navbar from "./Navbar"
 
@@ -79,10 +78,13 @@ const JobPage = () => {
         }
     }, [filters])
 
-    useEffect(() => {
-        const timeout = setTimeout(fetchJobs, 500)
-        return () => clearTimeout(timeout)
-    }, [filters, fetchJobs])
+    const handleApplyNow = (job: Job) => {
+        navigate(`/jobdetail/${job._id}`,
+            {
+                state: { job }
+            }
+        );
+    }
 
     const updateFilter = (key: string, value: string) => {
         setFilters(prev => ({ ...prev, [key]: value }))
@@ -282,7 +284,7 @@ const JobPage = () => {
                                     </div>
 
                                     {jobs.map((job) => (
-                                        <JobCard key={job._id} job={job} onApply={() => navigate(`/jobs/${job._id}`)} />
+                                        <JobCard key={job._id} job={job} onApply={() => handleApplyNow(job)} />
                                     ))}
                                 </>
                             )}
@@ -388,9 +390,6 @@ const JobCard = ({ job, onApply }: { job: Job; onApply: () => void }) => {
                         className="px-10 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white flex items-center justify-center shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition-all duration-200 group-hover:cursor-pointer"
                     >
                         Apply Now
-                    </button>
-                    <button className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all group-hover:cursor-pointer">
-                        <FiHeart size={16} />
                     </button>
                     <button className="p-2 text-slate-500 hover:text-yellow-400 hover:bg-yellow-500/10 rounded-xl transition-all group-hover:cursor-pointer">
                         <FiBookmark size={16} />
