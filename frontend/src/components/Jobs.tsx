@@ -23,6 +23,7 @@ interface Job {
     minSalary: number
     maxSalary: number
     salaryCurrency: string
+    salaryType: "Hourly" | "Monthly" | "Yearly"
     expireAt: string
     jobSkills: string[]
     status: "active" | "closed"
@@ -299,8 +300,8 @@ const JobPage = () => {
 // ── Job Card Component ─────────────────────────────────────
 
 const JobCard = ({ job, onApply }: { job: Job; onApply: () => void }) => {
-    const formatSalary = (min: number, max: number, currency: string) => {
-        return `${currency} ${min.toLocaleString()}-${max.toLocaleString()} / yr`
+    const formatSalary = (min: number, max: number, currency: string, salaryType: string) => {
+        return `${currency} ${min.toLocaleString()}-${max.toLocaleString()} / ${salaryType.toLowerCase()}`
     }
 
     const timeAgo = (date: string) => {
@@ -366,7 +367,7 @@ const JobCard = ({ job, onApply }: { job: Job; onApply: () => void }) => {
                         <div className="flex items-center justify-between mb-4">
                             <div className="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-xl">
                                 <span className="text-emerald-400 font-semibold text-sm">
-                                    {formatSalary(job.minSalary, job.maxSalary, job.salaryCurrency)}
+                                    {formatSalary(job.minSalary, job.maxSalary, job.salaryCurrency, job.salaryType)}
                                 </span>
                             </div>
                             <div className="flex gap-1.5">

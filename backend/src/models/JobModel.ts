@@ -15,6 +15,7 @@ export interface IJob extends Document {
     minSalary: number
     maxSalary: number
     salaryCurrency: string
+    salaryType: "Hourly" | "Monthly" | "Yearly"
     expireAt: Date
     status: "active" | "closed"
 
@@ -104,6 +105,13 @@ const JobSchema = new Schema<IJob>(
         salaryCurrency: {
             type: String,
             default: "USD",
+        },
+
+        salaryType: {
+            type: String,
+            enum: ["Hourly", "Monthly", "Yearly"],
+            default: "Monthly",
+            required: true
         },
 
         expireAt: {

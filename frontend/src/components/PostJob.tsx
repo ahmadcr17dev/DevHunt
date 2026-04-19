@@ -18,6 +18,7 @@ interface JobFormData {
     minSalary: string
     maxSalary: string
     salaryCurrency: string
+    salaryType: "Hourly" | "Monthly" | "Yearly"
     expireAt: string
 }
 
@@ -53,6 +54,7 @@ const PostJob = () => {
         minSalary: "",
         maxSalary: "",
         salaryCurrency: "USD",
+        salaryType: "Monthly",
         expireAt: "",
     })
 
@@ -115,6 +117,7 @@ const PostJob = () => {
                 minSalary: "",
                 maxSalary: "",
                 salaryCurrency: "USD",
+                salaryType: "Monthly",
                 expireAt: "",
             })
         } catch (err: any) {
@@ -304,6 +307,18 @@ const PostJob = () => {
                                         {currencyOptions.map(({ value, label }) => (
                                             <option key={value} value={value}>{label}</option>
                                         ))}
+                                    </select>
+                                </Field>
+                                {/* // EmployerJobForm.tsx */}
+                                <Field label="SalaryType" error={getFieldError("salaryType")}>
+                                    <select
+                                        value={formData.salaryType}
+                                        onChange={(e) => setFormData({ ...formData, salaryType: e.target.value as "Hourly" | "Monthly" | "Yearly" })}
+                                        className="salary-type-select"
+                                    >
+                                        <option value="hourly">Per Hour</option>
+                                        <option value="monthly">Per Month</option>
+                                        <option value="yearly">Per Year</option>
                                     </select>
                                 </Field>
                             </div>
