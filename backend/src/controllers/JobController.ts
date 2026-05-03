@@ -1,5 +1,6 @@
 import { Response } from "express";
 import JobModel from "../models/JobModel";
+import SavedJobModel from "../models/SavedJobModel";
 import { AuthRequest } from "../middlewares/AuthMiddleware";
 
 const HandleMongooseError = async (err: any, res: Response) => {
@@ -27,7 +28,10 @@ const CreateJob = async (req: AuthRequest, res: Response) => {
 
 const GetAllJobs = async (req: AuthRequest, res: Response) => {
     try {
-        const query: Record<string, unknown> = { status: "active" };
+        const query: Record<string, unknown> = {
+            status: "active",
+            expireAt: { $gte: new Date() } // only non-expired jobs will be fetched
+        };
         const { search, jobType, jobLocationType, jobCategory } = req.query;
 
         // Build the same query for both count and find
@@ -127,4 +131,61 @@ const ToggleJobStatus = async (req: AuthRequest, res: Response) => {
     }
 }
 
-export { HandleMongooseError, CreateJob, GetAllJobs, GetMyJobs, GetJobsByID, UpdateJob, DeleteJob, ToggleJobStatus };
+const saveJob = async (req: AuthRequest, res: Response) => {
+    try {
+        const { jobId } = req.params;
+        const userId = req.user?._id;
+
+        // check if already saved this job
+        const existingJob = await SavedJobModel.findOne({ user: userId, job: jobId })
+        if (existingJob) {
+            return res.status(400).json({ message: "Job already saved" });
+        }
+
+        // now save a job
+        const savedJob = await SavedJobModel.create({ user: userId, job: jobId } as any);
+
+        res.status(201).json({
+            success: true,
+            message: "Job Saved Successfully",
+            savedJob
+        });
+    } catch (error: any) {
+        HandleMongooseError(error, res);
+    }
+}
+
+const unsaveJob = async (req: AuthRequest, res: Response) => {
+    try {
+        const { jobId } = req.params;
+        const userId = req.user?._id;
+
+        const deletedJob = await SavedJobModel.findByIdAndDelete({
+            user: userId,
+            job: jobId
+        });
+        if (!deletedJob) {
+            return res.status(404).json({ message: "Job not found in saved jobs" });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Job removed from saved jobs"
+        });
+    } catch (error: any) {
+        HandleMongooseError(error, res);
+    }
+}
+
+const getSavedJobCounts = async (req: AuthRequest, res: Response) => {
+    try {
+        const userId = req.user?._id;
+        const count = await SavedJobModel.countDocuments({
+            user: userId
+        });
+        res.json({ count });
+    } catch (error: any) {
+        HandleMongooseError(error, res);
+    }
+}
+
+export { HandleMongooseError, CreateJob, GetAllJobs, GetMyJobs, GetJobsByID, UpdateJob, DeleteJob, ToggleJobStatus, saveJob, unsaveJob, getSavedJobCounts };

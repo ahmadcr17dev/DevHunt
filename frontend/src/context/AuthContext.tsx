@@ -26,6 +26,10 @@ interface AuthContextType {
     logout: () => void;
     ClearMessage: () => void;
     loadingUser: boolean;
+    savedJobs: string[],
+    saveJob: (jobId: string) => Promise<void>;
+    unsaveJob: (jobId: string) => Promise<void>;
+    getSavedJobCount: (jobId: string) => Promise<number>;
 }
 
 interface RegisterData {
@@ -48,6 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [loadingUser, setLoadingUser] = useState(true);
+    const [savedJobs, setSavedJobs] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -125,6 +130,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    // save job functionality
+    const saveJob = async (jobId: string) => {
+        try {
+            await axios.post(`${import.meta.env.VITE_SAVE_JOB}/${jobId}` as string,
+                {},
+                {
+                    withCredentials: true
+                }
+            );
+            setSavedJobs(prev => [...prev, jobId]);
+        } catch (error) {
+            console.error('Failed to save job');
+        }
+    }
+
+    // un save a job
+    const unsaveJob = async (jobId: string) => {
+        try {
+            await axios.delete(`${import.meta.env.VITE_UNSAVE_JOB}/${jobId}` as string,
+                {
+                    withCredentials: true
+                });
+            setSavedJobs(prev => prev.filter(id => id !== jobId));
+        } catch (error) {
+            console.error('Failed to unsave job');
+        }
+    }
+
+    // load saved jobs on login
+    useEffect(() => {
+        if (user) {
+            loadSavedJobs();
+        }
+    }, [user]);
+
+    const loadSavedJobs = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_GET_JOB_COUNT}` as string,
+                {
+                    withCredentials: true
+                }
+            );
+            setSavedJobs(response.data.savedJobs.map((sj: any) => sj.job._id));
+        } catch (error) {
+            console.error('Failed to load job counts');
+        }
+    }
+
     // clear message on page load
     const ClearMessage = () => {
         setSuccess(null);
@@ -132,7 +185,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, register, error, logout, success, login, ClearMessage, loadingUser }}>
+        <AuthContext.Provider value={
+            {
+                user, setUser, register, error, logout, success, login, ClearMessage, loadingUser, saveJob, savedJobs, unsaveJob,
+                getSavedJobCount: () => axios.get(`${import.meta.env.VITE_GET_JOB_COUNT}`, {
+                    withCredentials: true
+                }).then(res => res.data.count)
+            }
+        }>
             {children}
         </AuthContext.Provider>
     );

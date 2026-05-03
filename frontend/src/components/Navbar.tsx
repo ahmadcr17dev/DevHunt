@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { RiLogoutCircleRLine } from "react-icons/ri";
@@ -8,9 +8,19 @@ import logo from "../images/logo.png";
 import { FiBookmark, FiLogOut } from "react-icons/fi";
 
 const Navbar = () => {
-  const { user, logout } = useAuth(); // 🔥 Get user state!
+  const { user, logout, getSavedJobCount } = useAuth(); // 🔥 Get user state!
   const [showConfirmPanel, setShowConfirmPanel] = useState(false);
   const navigate = useNavigate();
+  const [savedCount, setSavedCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) {
+      setSavedCount(0);
+      return;
+    }
+
+    getSavedJobCount(user.username).then(count => setSavedCount(count));
+  }, [user, getSavedJobCount])
 
   const ConfirmLogOut = () => {
     logout();
@@ -66,12 +76,16 @@ const Navbar = () => {
                   >
                     <HiOutlineDocument size={18} color={"white"} className="mx-1 transition-transform duration-300" />
                   </button>
-                  <button
-                    className="rounded-xl transition-all duration-300 group hover:cursor-pointer"
-                    title="Saved Jobs"
-                  >
-                    <FiBookmark size={18} color={"white"} className="mx-1 transition-transform duration-300" />
-                  </button>
+                  {/* Saved Jobs Badge */}
+                  <NavLink to="/saved-jobs" className="relative p-2">
+                    <FiBookmark className="w-6 h-6 text-slate-400 hover:text-white" />
+
+                    {savedCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg">
+                        {savedCount > 99 ? '99+' : savedCount}
+                      </span>
+                    )}
+                  </NavLink>
                 </div>
               </>
             ) : (
