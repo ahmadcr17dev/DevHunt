@@ -9,9 +9,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import JobRouter from "./routes/JobRoute";
 
-const PORT = process.env.PORT;
-const app = express();
 dotenv.config();
+const PORT = process.env.PORT || 5000;
+const app = express();
 
 // call database connection function
 app.use(cors({
