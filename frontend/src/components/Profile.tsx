@@ -6,6 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import Loader from "./Loader";
 import axios from "axios";
+import { API } from "../config/api";
 
 const Profile = () => {
     const { user: contextUser, logout } = useAuth();
@@ -28,7 +29,7 @@ const Profile = () => {
         const fetchProfile = async () => {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_PROFILE_KEY}?userId=${contextUser._id}`,
+                    `${API.profile}?userId=${contextUser._id}`,
                     {
                         withCredentials: true
                     }

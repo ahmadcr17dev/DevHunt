@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { API } from "../config/api";
 
 // ---- Types ----
 interface User {
@@ -53,10 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get(
-                    import.meta.env.VITE_PROFILE_KEY as string,
-                    { withCredentials: true }
-                );
+                const res = await axios.get(API.profile, { withCredentials: true });
                 setUser(res.data.user);
             } catch (error) {
                 setUser(null);
@@ -74,7 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSuccess(null);
 
         try {
-            const response = await axios.post(import.meta.env.VITE_REGISTER_KEY as string, {
+            const response = await axios.post(API.register, {
                 username,
                 email,
                 password,
@@ -96,7 +94,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         try {
             const response = await axios.post(
-                import.meta.env.VITE_LOGIN_KEY as string,
+                API.login,
                 { username, password },
                 { withCredentials: true }
             );
@@ -113,7 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const logout = async () => {
         try {
-            await axios.post(import.meta.env.VITE_LOGOUT_KEY as string, {}, { withCredentials: true });
+            await axios.post(API.logout, {}, { withCredentials: true });
         } catch (error) {
             console.error("Logout failed: ", error);
         } finally {

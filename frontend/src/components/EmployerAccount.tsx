@@ -4,6 +4,7 @@ import { CiEdit } from "react-icons/ci";
 import { FiMail, FiPhone, FiMapPin, FiBriefcase, FiUser, FiTag } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import Loader from "./Loader";
+import { API } from "../config/api";
 
 const EmployerAccount = () => {
     const { user: contextUser } = useAuth();
@@ -16,7 +17,7 @@ const EmployerAccount = () => {
         const fetchProfile = async () => {
             try {
                 const response = await fetch(
-                    `${import.meta.env.VITE_PROFILE_KEY}?userId=${contextUser._id}`,
+                    `${API.profile}?userId=${contextUser._id}`,
                     { credentials: "include" }
                 );
                 const data = await response.json();

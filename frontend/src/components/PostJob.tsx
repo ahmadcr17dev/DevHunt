@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import worldCurrencies from "world-currencies"
+import { API } from "../config/api"
 
 interface JobFormData {
     jobTitle: string
@@ -91,7 +92,7 @@ const PostJob = () => {
         setSuccess(null)
 
         try {
-            const response = await axios.post(import.meta.env.VITE_CREATE_JOB_KEY as string, {
+            const response = await axios.post(API.createJob, {
                 ...formData,
                 jobSkills: formData.jobSkills.split(",").map((s) => s.trim()).filter(Boolean),
                 minSalary: Number(formData.minSalary),

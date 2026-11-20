@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { API } from "../config/api"
 import {
     FiSearch,
     FiMapPin,
@@ -65,7 +66,7 @@ const JobPage = () => {
             })
 
             const res = await axios.get(
-                `${import.meta.env.VITE_GET_ALL_JOBS}?${params.toString()}`,
+                `${API.getAllJobs}?${params.toString()}`,
                 { withCredentials: true }
             )
 

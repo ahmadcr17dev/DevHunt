@@ -3,6 +3,7 @@ import UserModel from "../models/UserModel";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import { AuthRequest } from "../middlewares/AuthMiddleware";
+import { authCookieOptions, clearAuthCookieOptions } from "../utils/cookieOptions";
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -100,12 +101,7 @@ const login = async (req: Request, res: Response) => {
         )
 
         // send and store cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false,           // false for localhost
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
+        res.cookie("token", token, authCookieOptions);
 
         // send response on login
         res.status(200).json({
@@ -129,11 +125,7 @@ const login = async (req: Request, res: Response) => {
 
 const logout = async (req: Request, res: Response) => {
     try {
-        res.clearCookie("token", {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        });
+        res.clearCookie("token", clearAuthCookieOptions);
         res.status(200).json({ success: true, message: "LogOut Successfull" });
     } catch (error) {
         console.log("Error", error);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { API } from "../config/api"
 import {
     FiBriefcase,
     FiEdit2,
@@ -101,7 +102,7 @@ const UpdateJobs = () => {
         try {
             setLoading(true)
             const res = await axios.get(
-                `${import.meta.env.VITE_GET_MY_JOBS}`,
+                API.getMyJobs,
                 { withCredentials: true }
             )
             setJobs(res.data.jobs)
@@ -117,7 +118,7 @@ const UpdateJobs = () => {
         setDeleting(true)
         try {
             await axios.delete(
-                `${import.meta.env.VITE_DELETE_JOB}/${jobToDelete._id}`,
+                `${API.deleteJob}/${jobToDelete._id}`,
                 { withCredentials: true }
             )
             setJobs((prev) => prev.filter((j) => j._id !== jobToDelete._id))
@@ -266,7 +267,7 @@ const UpdateJobs = () => {
                                         {new Date(job.createdAt).toLocaleDateString()}
                                     </span>
                                     <button
-                                        onClick={() => navigate(`${import.meta.env.VITE_UPDATE_JOB}/${job._id}`)}
+                                        onClick={() => navigate(`${API.updateJobPath}/${job._id}`)}
                                         className="p-2 rounded-xl text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-200 hover:cursor-pointer"
                                         title="Edit job"
                                     > 
