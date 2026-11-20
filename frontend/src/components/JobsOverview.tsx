@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, MapPin, CoinsIcon, Clock, Briefcase, AlertCircle, RefreshCw } from 'lucide-react';
 import axios from 'axios';
+import { API } from '../config/api';
 
 interface Job {
     _id: string;
@@ -31,7 +32,7 @@ const JobsOverview: React.FC = () => {
     const fetchJobs = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(import.meta.env.VITE_GET_MY_JOBS, { withCredentials: true });
+            const response = await axios.get(API.getMyJobs, { withCredentials: true });
             // Backend returns { jobs: [...] } so access response.data.jobs
             setJobs(response.data.jobs || response.data);
         } catch (error) {
@@ -47,7 +48,7 @@ const JobsOverview: React.FC = () => {
 
         try {
             setDeletingId(jobId);
-            await axios.delete(`${import.meta.env.VITE_DELETE_JOB}/${jobId}`, { withCredentials: true }); // Your backend delete endpoint
+            await axios.delete(`${API.deleteJob}/${jobId}`, { withCredentials: true });
             setJobs(jobs.filter(job => job._id !== jobId));
         } catch (error) {
             console.error('Error deleting job:', error);

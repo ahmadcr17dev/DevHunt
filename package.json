@@ -1,0 +1,15 @@
+{
+  "name": "devhunt",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DevHunt job platform — frontend + API on Vercel",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend"
+  },
+  "dependencies": {
+    "@vercel/node": "^5.1.8"
+  }
+}

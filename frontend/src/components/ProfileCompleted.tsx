@@ -4,6 +4,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+import { API } from "../config/api";
 
 interface ProfileFormData {
     username: string;
@@ -70,7 +71,7 @@ const ProfileCompleted = () => {
         setSuccess(null);
 
         try {
-            const response = await fetch(import.meta.env.VITE_PROFILECOMPLETED_KEY, {
+            const response = await fetch(API.profileCompleted, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
