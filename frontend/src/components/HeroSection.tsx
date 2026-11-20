@@ -1,76 +1,68 @@
-import logo1 from "../images/logo1.png";
 import { NavLink } from "react-router-dom";
-import Loader from "./Loader";
-import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const HeroSection = () => {
-    const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-    // load loader on page load
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2500)
-        return () => clearTimeout(timer);
-    }, [])
+  return (
+    <section className="relative min-h-screen overflow-hidden bg-bg">
+      {/* Full-bleed atmosphere */}
+      <div
+        className="pointer-events-none absolute inset-0 hero-atmosphere"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 1px 1px, rgba(11, 31, 51, 0.06) 1px, transparent 0)",
+          backgroundSize: "28px 28px",
+          maskImage:
+            "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+        }}
+      />
 
-    return (
-        <>
-            {loading && <Loader />}
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+        <p className="hero-fade-1 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl md:text-6xl lg:text-7xl">
+          DevHunt
+        </p>
 
-            {/* 
-                1. Section Background is now pure white (bg-white).
-                2. Gradient is contained inside the 'gradient-bg' div.
-                3. 'gradient-bg' is centered and limited to max-w-4xl, 
-                   so the left/right edges of the screen remain white.
-            */}
-            <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
+        <h1 className="hero-fade-2 mt-5 max-w-2xl font-display text-2xl font-medium leading-snug text-ink sm:text-3xl md:text-4xl">
+          Find work that fits how you build.
+        </h1>
 
-                {/* Gradient Background Container (Behind Content) */}
-                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50/60 to-white w-full max-w-4xl mx-auto"></div>
+        <p className="hero-fade-3 mt-4 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+          A focused job platform for developers — clear roles, real teams, fewer distractions.
+        </p>
 
-                {/* Decorative Blobs (Optional - keeps the modern feel) */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
-                    <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-                </div>
+        <div className="hero-fade-4 mt-10 flex flex-wrap items-center gap-3">
+          <NavLink
+            to="/jobspage"
+            className="inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-accent-hover hover:shadow-[0_8px_24px_rgba(14,124,123,0.25)]"
+          >
+            Browse jobs
+          </NavLink>
 
-                <div className="relative z-10 w-full max-w-4xl text-center flex flex-col items-center animate-fade-in-up">
-
-                    {/* Logo */}
-                    <div className="mb-8 transition-all duration-700 ease-out transform hover:scale-105">
-                        <img
-                            src={logo1}
-                            alt="Company Logo"
-                            className="w-[260px] sm:w-[360px] md:w-[450px] lg:w-[600px] h-auto object-contain drop-shadow-lg"
-                        />
-                    </div>
-
-                    {/* Headline */}
-                    <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight text-gray-900 mb-4">
-                        Let's Kickstart Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Career</span> Here
-                    </h1>
-
-                    {/* Subtext */}
-                    <p className="mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
-                        Create an account or sign in to see your personalized job recommendations tailored just for you.
-                    </p>
-
-                    {/* Button */}
-                    <NavLink
-                        to="/login"
-                        className="group mt-10 sm:mt-12 px-8 sm:px-10 md:px-12 py-4 bg-indigo-600 text-white font-semibold text-lg border border-transparent rounded-full shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300">
-                        <span className="flex items-center gap-2">
-                            Get Started
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </span>
-                    </NavLink>
-                </div>
-            </section>
-        </>
-    );
+          {user ? (
+            <NavLink
+              to="/profile"
+              className="inline-flex items-center justify-center rounded-lg border border-border bg-surface px-6 py-3 text-sm font-semibold text-ink transition-all duration-200 hover:border-accent hover:text-accent"
+            >
+              Your profile
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/register"
+              className="inline-flex items-center justify-center rounded-lg border border-border bg-surface px-6 py-3 text-sm font-semibold text-ink transition-all duration-200 hover:border-accent hover:text-accent"
+            >
+              Create account
+            </NavLink>
+          )}
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default HeroSection;

@@ -1,120 +1,162 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
-import { RiLogoutCircleRLine } from "react-icons/ri";
-import { HiOutlineDocument } from 'react-icons/hi';
-import { useAuth } from '../context/AuthContext'
-import logo from "../images/logo.png";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiUser, FiMenu, FiX } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { user, logout } = useAuth(); // 🔥 Get user state!
+  const { user, logout } = useAuth();
   const [showConfirmPanel, setShowConfirmPanel] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
   const ConfirmLogOut = () => {
     logout();
     setShowConfirmPanel(false);
+    setMobileOpen(false);
     navigate("/login", { replace: true });
-  }
+  };
 
-  const CancelLogOut = () => {
-    setShowConfirmPanel(false);
-  }
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `text-sm font-medium transition-colors duration-200 ${
+      isActive ? "text-accent" : "text-muted hover:text-ink"
+    }`;
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 bg-[#0f172a]/95 backdrop-blur-md shadow-lg border-b border-white/10">
-        <nav className="mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8 max-w-7xl">
-          {/* Logo */}
-          <div className="flex lg:flex-1">
-            <NavLink to="/" className="-m-1.5 p-1.5 flex items-center group transition-all duration-300 hover:scale-105">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-7 sm:h-8 md:h-9 w-auto transition-all duration-300 group-hover:drop-shadow-lg"
-              />
-            </NavLink>
-          </div>
+      <header className="fixed top-0 left-0 w-full z-50 border-b border-border bg-surface/90 backdrop-blur-md">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+          <NavLink
+            to="/"
+            className="font-display text-xl font-semibold tracking-tight text-ink transition-colors duration-200 hover:text-accent"
+          >
+            DevHunt
+          </NavLink>
 
-          {/* 🔥 AUTH STATE AWARE NAVBAR */}
-          <div className="flex items-center space-x-4">
+          <div className="hidden items-center gap-8 md:flex">
+            <NavLink to="/jobspage" className={linkClass}>
+              Jobs
+            </NavLink>
+
             {user ? (
-              // Logged IN
-              <>
-                <span className="text-white text-sm font-medium hidden md:block">
-                  {user.username}
-                </span>
-                <div className="flex items-center space-x-2">
-                  <NavLink
-                    to="/profile"
-                    className="text-white hover:text-gray-300 transition-colors p-1"
-                    title="Profile"
-                  >
-                    <FaUserCircle size={20} className="mx-1" />
-                  </NavLink>
-                  <button
-                    onClick={() => setShowConfirmPanel(true)}
-                    className="rounded-xl transition-all duration-300 group hover:cursor-pointer"
-                    title="LogOut"
-                  >
-                    <RiLogoutCircleRLine size={20} color={"white"} className="mx-1 group-hover:rotate-180 transition-transform duration-300" />
-                  </button>
-                  <button
-                    className="rounded-xl transition-all duration-300 group hover:cursor-pointer"
-                    title="Applied Jobs"
-                  >
-                    <HiOutlineDocument size={18} color={"white"} className="mx-1 transition-transform duration-300" />
-                  </button>
-                </div>
-              </>
+              <div className="flex items-center gap-4">
+                <NavLink
+                  to="/profile"
+                  className="flex items-center gap-2 text-sm font-medium text-muted transition-colors duration-200 hover:text-ink"
+                >
+                  <FiUser size={16} />
+                  <span className="max-w-32 truncate">{user.username}</span>
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPanel(true)}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-muted transition-all duration-200 hover:border-accent hover:text-accent cursor-pointer"
+                >
+                  <FiLogOut size={14} />
+                  Logout
+                </button>
+              </div>
             ) : (
-              // Logged OUT
-              <>
+              <div className="flex items-center gap-3">
                 <NavLink
                   to="/login"
-                  className="text-white hover:text-gray-300 transition-colors p-1"
-                  title="Login"
+                  className="text-sm font-medium text-muted transition-colors duration-200 hover:text-ink"
                 >
-                  <FaUserCircle size={20} />
+                  Login
                 </NavLink>
-              </>
+                <NavLink
+                  to="/register"
+                  className="rounded-lg bg-accent px-3.5 py-1.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-accent-hover"
+                >
+                  Register
+                </NavLink>
+              </div>
             )}
           </div>
+
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-lg border border-border p-2 text-ink md:hidden cursor-pointer"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <FiX size={18} /> : <FiMenu size={18} />}
+          </button>
         </nav>
+
+        {mobileOpen && (
+          <div className="border-t border-border bg-surface px-4 py-4 md:hidden">
+            <div className="flex flex-col gap-3">
+              <NavLink
+                to="/jobspage"
+                className="text-sm font-medium text-ink"
+                onClick={() => setMobileOpen(false)}
+              >
+                Jobs
+              </NavLink>
+              {user ? (
+                <>
+                  <NavLink
+                    to="/profile"
+                    className="text-sm font-medium text-muted"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Profile
+                  </NavLink>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      setShowConfirmPanel(true);
+                    }}
+                    className="text-left text-sm font-medium text-muted cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/login"
+                    className="text-sm font-medium text-muted"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to="/register"
+                    className="text-sm font-medium text-accent"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Register
+                  </NavLink>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Confirmation Panel */}
       {showConfirmPanel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4">
-          <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100 animate-in fade-in zoom-in duration-200">
-
-            {/* Icon */}
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border-2 border-red-500/20 flex items-center justify-center backdrop-blur-sm">
-              <FiLogOut className="w-10 h-10 text-red-400" />
-            </div>
-
-            {/* Title */}
-            <h2 className="text-2xl font-bold mb-3 text-white">
-              Are you sure?
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-lg">
+            <h2 className="font-display text-xl font-semibold text-ink">
+              Sign out?
             </h2>
-
-            {/* Subtitle */}
-            <p className="text-lg text-slate-300 mb-8 leading-relaxed max-w-sm mx-auto">
-              You will be logged out of your account.
+            <p className="mt-2 text-sm text-muted">
+              You will be logged out of your DevHunt account.
             </p>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-6 flex gap-3">
               <button
+                type="button"
                 onClick={ConfirmLogOut}
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-2xl font-semibold shadow-xl shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 border border-red-500/20 hover:cursor-pointer"
+                className="flex-1 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-accent-hover cursor-pointer"
               >
-                Yes, Logout
+                Logout
               </button>
               <button
-                onClick={CancelLogOut}
-                className="flex-1 px-6 py-4 bg-slate-700/50 text-slate-300 rounded-2xl font-semibold border border-slate-600/50 hover:bg-slate-700 hover:text-white hover:border-slate-500/50 transition-all duration-300 hover:cursor-pointer backdrop-blur-sm"
+                type="button"
+                onClick={() => setShowConfirmPanel(false)}
+                className="flex-1 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted transition-colors duration-200 hover:text-ink cursor-pointer"
               >
                 Cancel
               </button>

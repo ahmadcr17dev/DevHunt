@@ -43,22 +43,17 @@ const ProfileCompleted = () => {
     }, [])
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-        const fillUser = parsedUser || user;
-
-        if (fillUser) {
-            setFormData(prev => ({
-                username: fillUser.username || prev.username,
-                fullname: fillUser.fullname || prev.fullname,
-                gender: fillUser.gender as "male" | "female" | "custom" || prev.gender,
-                role: fillUser.role as "jobseeker" | "employer" | "both" || prev.role,
-                domain: fillUser.domain || prev.domain,
-                bio: fillUser.bio || prev.bio,
-                phone: fillUser.phone || prev.phone,
-                location: fillUser.location || prev.location,
-            }));
-        }
+        if (!user) return;
+        setFormData((prev) => ({
+            username: user.username || prev.username,
+            fullname: user.fullname || prev.fullname,
+            gender: (user.gender as "male" | "female" | "custom") || prev.gender,
+            role: (user.role as "jobseeker" | "employer" | "both") || prev.role,
+            domain: user.domain || prev.domain,
+            bio: user.bio || prev.bio,
+            phone: user.phone || prev.phone,
+            location: user.location || prev.location,
+        }));
     }, [user]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -97,9 +92,9 @@ const ProfileCompleted = () => {
                 }
             }, 1500);
 
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
-            setError(err.message || "Something went wrong");
+            setError(err instanceof Error ? err.message : "Something went wrong");
         }
     };
 
@@ -110,7 +105,7 @@ const ProfileCompleted = () => {
             {loading && <Loader />}
 
             {/* Background with gradient */}
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8">
+            <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8">
 
                 {/* Decorative background elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -122,7 +117,7 @@ const ProfileCompleted = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3">
 
                         {/* LEFT COLUMN */}
-                        <div className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 text-white p-8 lg:p-10">
+                        <div className="bg-linear-to-br from-indigo-600 via-indigo-700 to-purple-700 text-white p-8 lg:p-10">
                             <div className="flex items-center gap-3 mb-8">
                                 <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -303,7 +298,7 @@ const ProfileCompleted = () => {
                                 {/* Error & Success Messages */}
                                 {error && (
                                     <div className="md:col-span-2 px-6 py-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                         <p className="text-red-400 text-sm font-medium">{error}</p>
@@ -312,7 +307,7 @@ const ProfileCompleted = () => {
 
                                 {success && (
                                     <div className="md:col-span-2 px-6 py-4 bg-green-500/10 border border-green-500/30 rounded-2xl flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
                                         <p className="text-green-400 text-sm font-medium">{success}</p>
@@ -322,7 +317,7 @@ const ProfileCompleted = () => {
                                 <div className="md:col-span-2">
                                     <button
                                         type="submit"
-                                        className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-2xl shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 border border-slate-700/50 hover:cursor-pointer"
+                                        className="w-full py-5 bg-linear-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-2xl shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 border border-slate-700/50 hover:cursor-pointer"
                                     >
                                         <span>Save Profile</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
