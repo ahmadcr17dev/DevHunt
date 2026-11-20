@@ -1,7 +1,7 @@
 const CopyRight = () => {
   return (
-    <footer className="bg-gray-100 text-gray-600 text-xs sm:text-sm py-3 sm:py-4 w-full mt-auto">
-      <div className="max-w-7xl mx-auto text-center px-4 sm:px-6">
+    <footer className="w-full border-t border-border bg-surface py-4">
+      <div className="mx-auto max-w-6xl px-4 text-center text-xs text-muted sm:px-6 sm:text-sm">
         &copy; {new Date().getFullYear()} DevHunt. All rights reserved.
       </div>
     </footer>

@@ -4,15 +4,11 @@ import CopyRight from "../components/CopyRight";
 
 const Home = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Navbar */}
+    <div className="min-h-screen flex flex-col bg-bg">
       <Navbar />
-
-      {/* Centered Hero Section */}
-      <main className="flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-8">
+      <main className="flex-1">
         <HeroSection />
       </main>
-
       <CopyRight />
     </div>
   );

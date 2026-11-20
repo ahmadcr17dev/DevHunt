@@ -1,47 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  --bg: #F3F5F7;
+  --surface: #FFFFFF;
+  --ink: #0B1F33;
+  --muted: #5C6B7A;
+  --border: #DCE3EA;
+  --accent: #0E7C7B;
+  --accent-hover: #0A5F5E;
+  --accent-soft: #E7F4F3;
+  --warning: #C2410C;
+  --success: #15803D;
+  --font-display: "Fraunces", serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
 body {
-  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  background: radial-gradient(800px circle at var(--cursor-x, -9999px) var(--cursor-y, -9999px),
-      rgba(59, 130, 246, 0.15),
-      transparent 70%);
-}
-
-/* globals.css - ADD THIS */
+/* Autofill — kept for existing forms; aligned to light tokens */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-fill-color: rgb(31 41 55 / 0.5) !important;
-  -webkit-text-fill-color: #ffffff !important;
+  -webkit-text-fill-color: var(--ink) !important;
   transition: background-color 5000s ease-in-out 0s !important;
-  caret-color: #ffffff !important;
-  box-shadow: 0 0 0px 1000px rgb(31 41 55 / 0.5) inset !important;
+  caret-color: var(--ink) !important;
+  box-shadow: 0 0 0px 1000px var(--surface) inset !important;
 }
 
-input:-webkit-autofill ~ label {
-  color: #f8fafc !important;
-}
-
-/* Text selection */
 input::selection {
-  background: rgb(59 130 246 / 0.5) !important;
-  color: #ffffff !important;
+  background: var(--accent-soft) !important;
+  color: var(--ink) !important;
 }
 
 input::-moz-selection {
-  background: rgb(59 130 246 / 0.5) !important;
-  color: #ffffff !important;
+  background: var(--accent-soft) !important;
+  color: var(--ink) !important;
+}
+
+/* Landing hero motion + atmosphere */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes atmosphere-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -1.5%, 0) scale(1.03);
+  }
+}
+
+.hero-fade-1 {
+  animation: hero-fade-up 0.7s ease-out both;
+}
+
+.hero-fade-2 {
+  animation: hero-fade-up 0.7s ease-out 0.12s both;
+}
+
+.hero-fade-3 {
+  animation: hero-fade-up 0.7s ease-out 0.24s both;
+}
+
+.hero-fade-4 {
+  animation: hero-fade-up 0.7s ease-out 0.36s both;
+}
+
+.hero-atmosphere {
+  background:
+    radial-gradient(ellipse 70% 55% at 85% 20%, rgba(14, 124, 123, 0.18), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 10% 80%, rgba(231, 244, 243, 0.95), transparent 55%),
+    linear-gradient(165deg, #F3F5F7 0%, #E7F4F3 45%, #F3F5F7 100%);
+  animation: atmosphere-drift 18s ease-in-out infinite;
 }

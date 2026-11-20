@@ -24,7 +24,7 @@ interface AuthContextType {
     login: (data: LoginData) => Promise<User>;
     error: string | null;
     success: string | null;
-    logout: () => void;
+    logout: () => Promise<void>;
     ClearMessage: () => void;
     loadingUser: boolean;
 }
