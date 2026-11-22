@@ -10,18 +10,20 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = (
-    process.env.CLIENT_URL || "http://localhost:5173"
-)
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
+const allowedOrigins = [
+    ...(process.env.CLIENT_URL || "http://localhost:5173")
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    // Auto-allow this Vercel deployment URL when present
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+].filter(Boolean);
 
 app.use(
     cors({
         origin(origin, callback) {
             // Allow same-origin / non-browser / local tooling with no Origin header
-            if (!origin || allowedOrigins.includes(origin)) {
+            if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
                 callback(null, true);
                 return;
             }
