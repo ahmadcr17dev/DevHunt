@@ -81,11 +81,14 @@ const GetMyJobs = async (req: AuthRequest, res: Response) => {
 
 const GetJobsByID = async (req: AuthRequest, res: Response) => {
     try {
-        const job = await JobModel.findById(req.params.id).populate("employer", "name email");
+        const job = await JobModel.findById(req.params.id).populate(
+            "employer",
+            "username email fullname"
+        );
         if (!job) {
             return res.status(404).json({ success: false, message: "Job not found" });
         }
-        res.status(200).json({ job });
+        res.status(200).json({ success: true, job });
     } catch (err: any) {
         HandleMongooseError(err, res);
     }

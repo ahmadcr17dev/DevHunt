@@ -9,6 +9,7 @@ export const API = {
         (env.VITE_PROFILECOMPLETED_KEY as string) || "/api/auth/profilecompleted",
     createJob: (env.VITE_CREATE_JOB_KEY as string) || "/api/job/createjob",
     getAllJobs: (env.VITE_GET_ALL_JOBS as string) || "/api/job/getalljobs",
+    getJobById: (env.VITE_GET_JOB_BY_ID as string) || "/api/job/getjobsbyid",
     getMyJobs: (env.VITE_GET_MY_JOBS as string) || "/api/job/getmyjobs",
     deleteJob: (env.VITE_DELETE_JOB as string) || "/api/job/deletejob",
     updateJobPath: (env.VITE_UPDATE_JOB as string) || "/employer/updatejobs",
