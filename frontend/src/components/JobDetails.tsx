@@ -1,312 +1,392 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { FiMapPin, FiBriefcase, FiClock, FiShare2, FiBookmark, FiBookOpen, FiCheckCircle, FiStar, FiArrowLeft } from "react-icons/fi";
-import Loader from "./Loader";
+import {
+    FiMapPin,
+    FiBriefcase,
+    FiClock,
+    FiShare2,
+    FiArrowLeft,
+} from "react-icons/fi";
 import Navbar from "./Navbar";
+import { API } from "../config/api";
 
 interface Job {
-    _id: string
-    jobTitle: string
-    companyName: string
-    companyLocation: string
-    jobLocation: string
-    jobType: "Full Time" | "Part Time" | "Contract" | "Internship" | "Temporary" | "Fresher"
-    jobLocationType: "Remote" | "Onsite" | "Hybrid"
-    jobCategory: string
-    minSalary: number
-    maxSalary: number
-    salaryCurrency: string
-    expireAt: string
-    jobSkills: string[]
-    status: "active" | "closed"
-    createdAt: string
-    applicantsCount?: number
-    jobDescription: string
-    jobResponsibilities: string
-    jobRequirements: string
+    _id: string;
+    jobTitle: string;
+    companyName: string;
+    companyLocation: string;
+    jobLocation: string;
+    jobType:
+        | "Full Time"
+        | "Part Time"
+        | "Contract"
+        | "Internship"
+        | "Temporary"
+        | "Fresher";
+    jobLocationType: "Remote" | "Onsite" | "Hybrid";
+    jobCategory: string;
+    minSalary: number;
+    maxSalary: number;
+    salaryCurrency: string;
+    salaryType?: "Hourly" | "Monthly" | "Yearly";
+    expireAt: string;
+    jobSkills: string[];
+    status: "active" | "closed";
+    createdAt: string;
+    applicantsCount?: number;
+    jobDescription: string;
+    jobResponsibilities: string;
+    jobRequirements: string;
 }
+
+const formatSalary = (min: number, max: number, currency: string, type?: string) => {
+    const range = `${currency || ""} ${min.toLocaleString()}–${max.toLocaleString()}`.trim();
+    return type ? `${range} / ${type.toLowerCase()}` : range;
+};
+
+const formatDate = (value: string) =>
+    new Date(value).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+
+const splitLines = (text?: string) =>
+    (text || "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
 
 const JobDetails = () => {
     const { jobId } = useParams<{ jobId: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const [job, setJob] = useState<Job | null>(null);
-    const [loading, setLoading] = useState(true);
+    const detailsRef = useRef<HTMLElement>(null);
+
+    const initialStateJob = (() => {
+        const fromState = (location.state as { job?: Job } | null)?.job;
+        return fromState && fromState._id === jobId ? fromState : null;
+    })();
+
+    const [job, setJob] = useState<Job | null>(initialStateJob);
+    const [loading, setLoading] = useState(!initialStateJob);
+    const [notFound, setNotFound] = useState(false);
+    const [shareHint, setShareHint] = useState<string | null>(null);
 
     useEffect(() => {
-        const jobFromState = location.state?.job as Job | undefined;
-
-        if (jobFromState && jobFromState._id === jobId) {
-            setJob(jobFromState);
+        if (!jobId) {
+            setNotFound(true);
             setLoading(false);
             return;
         }
 
-        setLoading(false);
-    }, [location.state, jobId]);
+        const fromState = (location.state as { job?: Job } | null)?.job;
+        const stateJob =
+            fromState && fromState._id === jobId ? fromState : null;
 
-    const formatSalary = (minSalary: number, maxSalary: number, currency: string) =>
-        `${currency} ${minSalary.toLocaleString()} - ${maxSalary.toLocaleString()}`;
+        // Instant paint from list navigation when ids match
+        if (stateJob) {
+            setJob(stateJob);
+            setLoading(false);
+            setNotFound(false);
+        } else {
+            setLoading(true);
+        }
 
-    const timeAgo = (dateString: string) => {
-        const now = new Date();
-        const jobDate = new Date(dateString);
-        const diff = now.getTime() - jobDate.getTime();
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        return days === 0 ? "Today" : `${days}d ago`;
+        let cancelled = false;
+        const hadState = Boolean(stateJob);
+
+        const load = async () => {
+            try {
+                const res = await axios.get(`${API.getJobById}/${jobId}`);
+                if (cancelled) return;
+                const serverJob = res.data?.job as Job | undefined;
+                if (!serverJob) {
+                    setNotFound(true);
+                    setJob(null);
+                    return;
+                }
+                setJob(serverJob);
+                setNotFound(false);
+            } catch (err) {
+                if (cancelled) return;
+                const status = axios.isAxiosError(err)
+                    ? err.response?.status
+                    : undefined;
+                if (status === 404 || !hadState) {
+                    setJob(null);
+                    setNotFound(true);
+                }
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+
+        void load();
+        return () => {
+            cancelled = true;
+        };
+    }, [jobId, location.state]);
+
+    const handleShare = async () => {
+        const url = window.location.href;
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: job?.jobTitle, url });
+                return;
+            }
+            await navigator.clipboard.writeText(url);
+            setShareHint("Link copied");
+            window.setTimeout(() => setShareHint(null), 2000);
+        } catch {
+            setShareHint("Could not share");
+            window.setTimeout(() => setShareHint(null), 2000);
+        }
     };
 
-    if (loading) return <Loader />;
-
-    if (!job) return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 sm:p-8">
-            <div className="text-center max-w-sm w-full">
-                <div className="w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <FiBriefcase className="w-10 h-10 text-slate-600" />
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4">Job Not Found</h1>
-                <p className="text-slate-400 text-sm sm:text-base mb-8 leading-relaxed">The job you're looking for doesn't exist or has been removed.</p>
-                <button
-                    onClick={() => navigate("/jobspage")}
-                    className="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl max-w-sm mx-auto block"
-                >
-                    ← Back to Jobs
-                </button>
-            </div>
-        </div>
-    );
-
-    return (
-        <>
-            <Navbar />
-            <div className="pt-26 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-                {/* Breadcrumb - Mobile */}
-                <div className="max-w-7xl mx-auto px-4 py-4 lg:hidden">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-2"
-                    >
-                        <FiArrowLeft className="w-4 h-4" />
-                        Back to search results
-                    </button>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-3/4 lg:gap-10 gap-6">
-
-                        {/* Main Content */}
-                        <div className="lg:col-span-2 space-y-6">
-
-                            {/* Job Header */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl">
-                                <div className="space-y-6">
-
-                                    {/* Title & Company */}
-                                    <div className="space-y-3">
-                                        <div className="flex items-start justify-between flex-wrap gap-4">
-                                            <div className="flex-1 min-w-0">
-                                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight break-words">
-                                                    {job.jobTitle}
-                                                </h1>
-                                                <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-slate-400">
-                                                    <div className="flex items-center gap-2 font-semibold text-white">
-                                                        <FiBriefcase className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                                                        {job.companyName}
-                                                    </div>
-                                                    <div className="w-px h-4 bg-slate-600" />
-                                                    <div className="flex items-center gap-2">
-                                                        <FiMapPin className="w-4 h-4 text-emerald-400" />
-                                                        <span>{job.jobLocation}</span>
-                                                        <span className="font-medium">({job.jobLocationType})</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Posted info */}
-                                            <div className="text-right flex-shrink-0 text-xs sm:text-sm">
-                                                <div className="flex items-center justify-end gap-2 text-slate-500 mb-1">
-                                                    <FiClock className="w-3 h-3 flex-shrink-0" />
-                                                    Posted {timeAgo(job.createdAt)}
-                                                </div>
-                                                {job.applicantsCount && (
-                                                    <div className="text-slate-500">
-                                                        {job.applicantsCount} applicants
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Salary & Tags */}
-                                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-6 bg-slate-750/50 border border-slate-700/50 rounded-2xl">
-                                        <div className="flex items-center gap-3 flex-1">
-                                            <div className="w-2 h-7 bg-gradient-to-b from-emerald-400 to-emerald-500 rounded-full flex-shrink-0" />
-                                            <div>
-                                                <p className="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-400 leading-tight">
-                                                    {formatSalary(job.minSalary, job.maxSalary, job.salaryCurrency)}
-                                                </p>
-                                                <p className="text-xs sm:text-sm text-slate-500">Employer est.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-wrap gap-2">
-                                            <div className={`px-3 py-2 rounded-lg text-xs font-semibold border flex-shrink-0 ${job.jobLocationType === 'Remote'
-                                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                                                : 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                                                }`}>
-                                                {job.jobLocationType}
-                                            </div>
-                                            <div className="px-3 py-2 bg-slate-700/50 border border-slate-600/50 text-xs text-slate-300 rounded-lg font-medium">
-                                                {job.jobType}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* CTA Buttons */}
-                                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                        <button className="flex-1 px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-2xl shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base h-14">
-                                            <FiBriefcase className="w-4 h-4 flex-shrink-0" />
-                                            Apply Now
-                                        </button>
-                                        <div className="flex gap-2 flex-shrink-0">
-                                            <button className="p-3 bg-slate-800/50 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-400 hover:text-white transition-all flex items-center justify-center shadow-md hover:shadow-lg">
-                                                <FiShare2 className="w-4 h-4" />
-                                            </button>
-                                            <button className="p-3 bg-slate-800/50 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-400 hover:text-yellow-400 transition-all flex items-center justify-center shadow-md hover:shadow-lg">
-                                                <FiBookmark className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Job Description */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl">
-                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                    <FiBookOpen className="w-6 h-6 text-blue-400 flex-shrink-0" />
-                                    About this job
-                                </h2>
-                                <div
-                                    className="text-sm sm:text-base text-slate-300 leading-relaxed prose prose-invert max-w-none"
-                                    dangerouslySetInnerHTML={{
-                                        __html: job.jobDescription.replace(/\n/g, '<br/>')
-                                    }}
-                                />
-                            </div>
-
-                            {/* Responsibilities */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl">
-                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                    <FiCheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                                    What you'll do
-                                </h2>
-                                <ul className="space-y-3 text-sm sm:text-base text-slate-300">
-                                    {job.jobResponsibilities.split('\n').filter(Boolean).map((resp, i) => (
-                                        <li key={i} className="flex items-start gap-3 pl-1 hover:translate-x-2 transition-transform group">
-                                            <div className="w-2 h-2 bg-emerald-400 rounded-full mt-2.5 flex-shrink-0 group-hover:scale-125 transition-transform" />
-                                            <span className="leading-relaxed">{resp}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            {/* Requirements */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl">
-                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                    <FiStar className="w-6 h-6 text-amber-400 flex-shrink-0" />
-                                    What you need to succeed
-                                </h2>
-                                <ul className="space-y-3 text-sm sm:text-base text-slate-300">
-                                    {job.jobRequirements.split('\n').filter(Boolean).map((req, i) => (
-                                        <li key={i} className="flex items-start gap-3 pl-1 hover:translate-x-2 transition-transform group">
-                                            <div className="w-2 h-2 bg-amber-400 rounded-full mt-2.5 flex-shrink-0 group-hover:scale-125 transition-transform" />
-                                            <span className="leading-relaxed">{req}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
-                        {/* Sidebar */}
-                        <div className="lg:col-span-1 space-y-6 lg:sticky lg:top-24 self-start lg:pt-4">
-
-                            {/* Company Card */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 shadow-2xl">
-                                <h3 className="text-lg sm:text-xl font-bold text-white mb-5">Company</h3>
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-4 p-4 bg-slate-750/50 rounded-2xl hover:bg-slate-700/30 transition-all">
-                                        <div className="w-14 h-14 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                                            <FiBriefcase className="w-7 h-7 text-blue-400" />
-                                        </div>
-                                        <div className="min-w-0 flex-1">
-                                            <p className="font-semibold text-white text-sm sm:text-base truncate">{job.companyName}</p>
-                                            <p className="text-xs sm:text-sm text-slate-400 truncate">{job.companyLocation}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Job Details */}
-                            {/* Combined Job Details + Skills - SIDE BY SIDE */}
-                            <div className="bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl rounded-3xl p-6 shadow-2xl">
-                                <h3 className="text-lg sm:text-xl font-bold text-white mb-6">Job details</h3>
-
-                                {/* Grid Layout - Side by Side */}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6">
-
-                                    {/* Left Column - Job Details */}
-                                    <div className="space-y-4">
-                                        <div>
-                                            <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                                                <FiBriefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                                                Job type
-                                            </div>
-                                            <div className="font-semibold text-white capitalize text-sm">{job.jobType}</div>
-                                        </div>
-
-                                        <div>
-                                            <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                                                <FiMapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                                                Location type
-                                            </div>
-                                            <div className="font-semibold text-white capitalize text-sm">{job.jobLocationType}</div>
-                                        </div>
-
-                                        <div>
-                                            <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                                                <FiClock className="w-3.5 h-3.5 flex-shrink-0" />
-                                                Expires
-                                            </div>
-                                            <div className="font-semibold text-white text-xs">
-                                                {new Date(job.expireAt).toLocaleDateString()}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Right Column - Skills */}
-                                    <div>
-                                        <div className="text-xs text-slate-400 mb-3 font-medium uppercase tracking-wider">Skills</div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {job.jobSkills.slice(0, 9).map((skill, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="px-3 py-1.5 bg-slate-750/50 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-600/50 hover:border-blue-500/50 hover:text-blue-300 transition-all truncate"
-                                                >
-                                                    {skill}
-                                                </span>
-                                            ))}
-                                            {job.jobSkills.length > 9 && (
-                                                <span className="px-3 py-1.5 text-xs text-slate-500 bg-slate-750/30 rounded-lg border border-slate-600/50">
-                                                    +{job.jobSkills.length - 6} more
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+    if (loading && !job) {
+        return (
+            <>
+                <Navbar />
+                <div className="min-h-screen bg-bg pt-24">
+                    <div className="mx-auto max-w-3xl px-4 sm:px-6">
+                        <div className="animate-pulse space-y-4">
+                            <div className="h-4 w-28 rounded bg-border" />
+                            <div className="h-10 w-3/4 rounded bg-border" />
+                            <div className="h-5 w-1/2 rounded bg-border" />
+                            <div className="h-5 w-2/3 rounded bg-border" />
+                            <div className="mt-8 flex gap-3">
+                                <div className="h-11 w-36 rounded-lg bg-border" />
+                                <div className="h-11 w-28 rounded-lg bg-border" />
                             </div>
                         </div>
                     </div>
                 </div>
+            </>
+        );
+    }
+
+    if (notFound || !job) {
+        return (
+            <>
+                <Navbar />
+                <div className="flex min-h-screen items-center justify-center bg-bg px-4 pt-20">
+                    <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center shadow-sm">
+                        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-soft">
+                            <FiBriefcase className="text-accent" size={24} />
+                        </div>
+                        <h1 className="font-display text-2xl font-semibold text-ink">
+                            Job not found
+                        </h1>
+                        <p className="mt-2 text-sm text-muted">
+                            This role doesn&apos;t exist or is no longer available.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() => navigate("/jobspage")}
+                            className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover cursor-pointer"
+                        >
+                            <FiArrowLeft size={16} />
+                            Back to jobs
+                        </button>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    const responsibilities = splitLines(job.jobResponsibilities);
+    const requirements = splitLines(job.jobRequirements);
+
+    return (
+        <>
+            <Navbar />
+            <div className="min-h-screen bg-bg pt-20">
+                {/* Hero / first viewport */}
+                <section className="relative overflow-hidden border-b border-border">
+                    <div
+                        className="pointer-events-none absolute inset-0 opacity-90"
+                        aria-hidden="true"
+                        style={{
+                            background:
+                                "radial-gradient(ellipse 70% 60% at 90% 0%, rgba(14,124,123,0.12), transparent 55%), radial-gradient(ellipse 50% 40% at 0% 100%, rgba(231,244,243,0.85), transparent 50%)",
+                        }}
+                    />
+
+                    <div className="relative mx-auto max-w-3xl px-4 pb-12 pt-8 sm:px-6 sm:pt-12">
+                        <button
+                            type="button"
+                            onClick={() => navigate("/jobspage")}
+                            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-accent cursor-pointer"
+                        >
+                            <FiArrowLeft size={16} />
+                            Back to jobs
+                        </button>
+
+                        <p className="text-sm font-medium text-accent">{job.companyName}</p>
+
+                        <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
+                            {job.jobTitle}
+                        </h1>
+
+                        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
+                            <span className="inline-flex items-center gap-1.5">
+                                <FiMapPin size={14} className="text-accent" />
+                                {job.jobLocation}
+                            </span>
+                            <span className="rounded-md border border-accent/20 bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent">
+                                {job.jobLocationType}
+                            </span>
+                            <span className="rounded-md border border-border bg-surface px-2 py-0.5 text-xs font-medium text-ink">
+                                {job.jobType}
+                            </span>
+                            {job.jobCategory && (
+                                <span className="inline-flex items-center gap-1.5">
+                                    <FiBriefcase size={14} />
+                                    {job.jobCategory}
+                                </span>
+                            )}
+                            <span className="inline-flex items-center gap-1.5">
+                                <FiClock size={14} />
+                                Posted {formatDate(job.createdAt)}
+                            </span>
+                        </div>
+
+                        {(job.minSalary > 0 || job.maxSalary > 0) && (
+                            <p className="mt-4 text-lg font-semibold text-success">
+                                {formatSalary(
+                                    job.minSalary,
+                                    job.maxSalary,
+                                    job.salaryCurrency,
+                                    job.salaryType
+                                )}
+                            </p>
+                        )}
+
+                        {/* One CTA group */}
+                        <div className="mt-8 flex flex-wrap items-center gap-3">
+                            <button
+                                type="button"
+                                disabled
+                                title="Apply comes in a later session"
+                                className="rounded-lg bg-accent/50 px-6 py-3 text-sm font-semibold text-white cursor-not-allowed"
+                            >
+                                Apply
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    detailsRef.current?.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "start",
+                                    })
+                                }
+                                className="rounded-lg border border-border bg-surface px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent cursor-pointer"
+                            >
+                                View details
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleShare}
+                                className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-3 text-sm font-medium text-muted transition-colors hover:border-accent hover:text-accent cursor-pointer"
+                            >
+                                <FiShare2 size={16} />
+                                Share
+                            </button>
+                            {shareHint && (
+                                <span className="text-xs font-medium text-accent">
+                                    {shareHint}
+                                </span>
+                            )}
+                        </div>
+
+                        {loading && (
+                            <p className="mt-4 text-xs text-muted">Refreshing from server…</p>
+                        )}
+                    </div>
+                </section>
+
+                {/* Details below fold — single column, not a card dashboard */}
+                <section
+                    ref={detailsRef}
+                    className="mx-auto max-w-3xl space-y-10 px-4 py-12 sm:px-6"
+                >
+                    <div>
+                        <h2 className="font-display text-xl font-semibold text-ink">
+                            About this role
+                        </h2>
+                        <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-muted sm:text-base">
+                            {job.jobDescription || "No description provided."}
+                        </p>
+                    </div>
+
+                    {responsibilities.length > 0 && (
+                        <div>
+                            <h2 className="font-display text-xl font-semibold text-ink">
+                                Responsibilities
+                            </h2>
+                            <ul className="mt-4 space-y-2.5">
+                                {responsibilities.map((item) => (
+                                    <li
+                                        key={item}
+                                        className="flex gap-3 text-sm leading-relaxed text-muted sm:text-base"
+                                    >
+                                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {requirements.length > 0 && (
+                        <div>
+                            <h2 className="font-display text-xl font-semibold text-ink">
+                                Requirements
+                            </h2>
+                            <ul className="mt-4 space-y-2.5">
+                                {requirements.map((item) => (
+                                    <li
+                                        key={item}
+                                        className="flex gap-3 text-sm leading-relaxed text-muted sm:text-base"
+                                    >
+                                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {job.jobSkills?.length > 0 && (
+                        <div>
+                            <h2 className="font-display text-xl font-semibold text-ink">
+                                Skills
+                            </h2>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {job.jobSkills.map((skill) => (
+                                    <span
+                                        key={skill}
+                                        className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium text-ink"
+                                    >
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="border-t border-border pt-6 text-sm text-muted">
+                        <p>
+                            {job.companyName}
+                            {job.companyLocation ? ` · ${job.companyLocation}` : ""}
+                        </p>
+                        {job.expireAt && (
+                            <p className="mt-1">Expires {formatDate(job.expireAt)}</p>
+                        )}
+                    </div>
+                </section>
             </div>
         </>
     );

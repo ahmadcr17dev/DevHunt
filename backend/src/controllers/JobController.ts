@@ -3,7 +3,7 @@ import JobModel from "../models/JobModel";
 import { AuthRequest } from "../middlewares/AuthMiddleware";
 
 const HandleMongooseError = async (err: any, res: Response) => {
-    if (err.name === "ValidateError") {
+    if (err.name === "ValidationError") {
         const errors = Object.values(err.errors).map((e: any) => ({
             field: e.path,
             message: e.message
