@@ -1,15 +1,13 @@
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
-import CopyRight from "../components/CopyRight";
 
 const Home = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-bg">
+    <div className="home-shell h-dvh overflow-hidden bg-bg">
       <Navbar />
-      <main className="flex-1">
+      <main className="h-full">
         <HeroSection />
       </main>
-      <CopyRight />
     </div>
   );
 };
