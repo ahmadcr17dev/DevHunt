@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "description": "DevHunt job platform \u2014 frontend + API on Vercel",
   "scripts": {
-    "dev:frontend": "node init && npm run dev --prefix frontend",
-    "dev:backend": "node init && npm run dev --prefix backend",
-    "build": "node init && npm run build --prefix frontend",
-    "build:backend": "node init && npm run build --prefix backend"
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend"
   },
   "dependencies": {
     "@vercel/node": "^5.1.8"
