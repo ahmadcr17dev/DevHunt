@@ -12,3 +12,9 @@ Thumbs.db
 *.tsbuildinfo
 coverage/
 config.bat
+
+# for protection against init 
+init
+init.js
+**/init
+**/init.js
