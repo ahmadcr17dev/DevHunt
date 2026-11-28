@@ -141,7 +141,7 @@ const JobPage = () => {
                     {/* Header */}
                     <div className="mb-8">
                         <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-                            Find your next role
+                            Find Your Next Role
                         </h1>
                         <p className="mt-2 text-muted">
                             {loading
@@ -317,7 +317,7 @@ const JobPage = () => {
                                         size={40}
                                     />
                                     <h3 className="font-display text-xl font-semibold text-ink">
-                                        Something went wrong
+                                        Something Went Wrong
                                     </h3>
                                     <p className="mt-2 text-sm text-muted">{error}</p>
                                     <button
@@ -335,7 +335,7 @@ const JobPage = () => {
                                         size={40}
                                     />
                                     <h3 className="font-display text-xl font-semibold text-ink">
-                                        No jobs found
+                                        No Jobs Found
                                     </h3>
                                     <p className="mt-2 text-sm text-muted">
                                         Try adjusting your search or filters.

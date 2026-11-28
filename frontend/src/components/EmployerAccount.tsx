@@ -11,9 +11,9 @@ const EmployerAccount = () => {
     const [user, setUser] = useState(contextUser);
     const [error, setError] = useState<string | null>(null);
 
-    if (!contextUser) return <Navigate to="/login" replace />;
-
     useEffect(() => {
+        if (!contextUser) return;
+
         const fetchProfile = async () => {
             try {
                 const response = await fetch(
@@ -26,16 +26,18 @@ const EmployerAccount = () => {
                     return;
                 }
                 setUser(data.user);
-            } catch (err) {
+            } catch {
                 setError("Something went wrong");
             }
         };
         fetchProfile();
     }, [contextUser]);
 
+    if (!contextUser) return <Navigate to="/login" replace />;
+
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+            <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
                 <div className="px-6 py-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
                     {error}
                 </div>
@@ -46,7 +48,7 @@ const EmployerAccount = () => {
     if (!user) return <Loader />;
 
     return (
-        <div className="min-h-screen flex items-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 md:px-8">
+        <div className="min-h-screen flex items-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 md:px-8">
 
             {/* Decorative background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -63,12 +65,12 @@ const EmployerAccount = () => {
                         <div className="flex flex-col items-center text-center">
 
                             {/* Avatar */}
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg shadow-blue-500/30 hover:scale-105 transition-transform duration-300">
+                            <div className="w-24 h-24 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg shadow-blue-500/30 hover:scale-105 transition-transform duration-300">
                                 {user.username.charAt(0).toUpperCase()}
                             </div>
 
                             <h2 className="mt-5 text-xl font-bold text-white">
-                                {user.fullname || "No name added"}
+                                {user.fullname || "No Name Added"}
                             </h2>
                             <p className="text-sm text-slate-400 mt-1">@{user.username}</p>
 
@@ -113,7 +115,7 @@ const EmployerAccount = () => {
                         <div className="mt-6">
                             <NavLink
                                 to="/profilecompleted"
-                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300"
+                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300"
                             >
                                 <CiEdit className="w-5 h-5" />
                                 Edit Profile
@@ -127,7 +129,7 @@ const EmployerAccount = () => {
                         {/* Profile Information */}
                         <div className="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6 sm:p-8 hover:border-slate-600/50 transition-colors duration-300">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full" />
+                                <div className="w-1 h-6 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full" />
                                 <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">Profile Information</h3>
                             </div>
 
@@ -158,7 +160,7 @@ const EmployerAccount = () => {
                         {/* Bio */}
                         <div className="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6 sm:p-8 hover:border-slate-600/50 transition-colors duration-300">
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-1 h-6 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full" />
+                                <div className="w-1 h-6 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full" />
                                 <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">Bio</h3>
                             </div>
                             <p className="text-slate-300 leading-relaxed whitespace-pre-wrap text-sm">

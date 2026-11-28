@@ -125,7 +125,7 @@ const EmployerSidebar = () => {
 
                         {/* Title */}
                         <h2 className="text-2xl font-bold mb-3 text-white">
-                            Are you sure?
+                            Are You Sure?
                         </h2>
 
                         {/* Subtitle */}

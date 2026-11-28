@@ -3,9 +3,9 @@ import HeroSection from "../components/HeroSection";
 
 const Home = () => {
   return (
-    <div className="home-shell h-dvh overflow-hidden bg-bg">
+    <div className="min-h-dvh bg-bg">
       <Navbar />
-      <main className="h-full">
+      <main>
         <HeroSection />
       </main>
     </div>

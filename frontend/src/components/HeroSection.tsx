@@ -5,22 +5,22 @@ const HeroSection = () => {
   const { user } = useAuth();
 
   return (
-    <section className="relative flex h-dvh flex-col overflow-hidden bg-bg">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+    <section className="relative flex min-h-dvh flex-col bg-bg">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute inset-0 hero-atmosphere" />
         <div className="absolute inset-0 hero-grid" />
 
-        <div className="absolute -right-[18%] top-[-12%] h-[min(72vmin,28rem)] w-[min(72vmin,28rem)] rounded-full bg-accent/25 blur-3xl hero-orb-a sm:-right-[12%] sm:top-[-8%]" />
-        <div className="absolute -left-[16%] bottom-[-14%] h-[min(58vmin,22rem)] w-[min(58vmin,22rem)] rounded-full bg-accent-soft blur-3xl hero-orb-b" />
-        <div className="absolute right-[6%] top-[20%] hidden h-[min(36vmin,16rem)] w-[min(36vmin,16rem)] rounded-full border border-accent/25 hero-ring sm:block" />
-        <div className="absolute right-[12%] top-[26%] hidden h-[min(24vmin,11rem)] w-[min(24vmin,11rem)] rounded-full border border-accent/35 hero-ring-delay md:block" />
+        <div className="hero-orb-a absolute -top-16 -right-24 size-72 rounded-full bg-accent/25 blur-3xl sm:-top-10 sm:-right-16 sm:size-96" />
+        <div className="hero-orb-b absolute -bottom-20 -left-20 size-64 rounded-full bg-accent-soft blur-3xl sm:size-80" />
+        <div className="hero-ring absolute top-1/4 right-8 hidden size-48 rounded-full border border-accent/25 sm:block lg:size-64" />
+        <div className="hero-ring-delay absolute top-1/3 right-16 hidden size-32 rounded-full border border-accent/35 md:block lg:size-44" />
 
-        <span className="hero-sparkle absolute left-[18%] top-[28%] h-1.5 w-1.5 rounded-full bg-accent" />
-        <span className="hero-sparkle-delay absolute left-[72%] top-[18%] h-2 w-2 rounded-full bg-accent/70" />
-        <span className="hero-sparkle-slow absolute left-[58%] top-[68%] h-1 w-1 rounded-full bg-ink/40" />
+        <span className="hero-sparkle absolute top-1/4 left-1/4 size-1.5 rounded-full bg-accent" />
+        <span className="hero-sparkle-delay absolute top-1/4 right-1/4 size-2 rounded-full bg-accent/70" />
+        <span className="hero-sparkle-slow absolute bottom-1/3 left-1/2 size-1 rounded-full bg-ink/40" />
 
         <svg
-          className="absolute inset-0 hidden h-full w-full sm:block"
+          className="absolute inset-0 hidden size-full sm:block"
           viewBox="0 0 1440 900"
           preserveAspectRatio="xMidYMid slice"
           fill="none"
@@ -50,17 +50,17 @@ const HeroSection = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 mx-auto grid h-full w-full max-w-6xl flex-1 grid-cols-1 items-center gap-8 px-4 pb-14 pt-20 sm:px-6 sm:pb-16 sm:pt-24 lg:grid-cols-2 lg:gap-12 lg:px-8">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 items-center gap-8 px-4 pt-20 pb-14 sm:px-6 sm:pt-24 sm:pb-16 lg:grid-cols-2 lg:gap-12 lg:px-8">
         <div className="min-w-0">
-          <p className="hero-brand font-display font-bold tracking-tight text-ink text-[clamp(2.5rem,10vw,5.5rem)]">
+          <p className="hero-brand font-display text-5xl font-bold tracking-tight text-ink sm:text-6xl md:text-7xl lg:text-8xl">
             DevHunt
           </p>
 
           <div className="mt-3 w-full max-w-md sm:mt-5 sm:max-w-lg">
-            <h1 className="hero-fade-2 font-display font-normal leading-snug text-ink text-[clamp(1.25rem,4.2vw,2.25rem)]">
-              Find work that fits how you build.
+            <h1 className="hero-fade-2 font-display text-2xl font-normal leading-snug text-ink sm:text-3xl md:text-4xl">
+              Find Work That Fits How You Build.
             </h1>
-            <p className="hero-fade-3 mt-3 text-muted sm:mt-4 text-[clamp(0.9rem,2.4vw,1.125rem)] leading-relaxed">
+            <p className="hero-fade-3 mt-3 text-sm leading-relaxed text-muted sm:mt-4 sm:text-base md:text-lg">
               A focused job platform for developers — clear roles, real teams, fewer distractions.
             </p>
           </div>
@@ -91,21 +91,20 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Right-side job hunt animation — aligned with copy */}
         <div
           className="hero-job-stage relative mx-auto hidden w-full max-w-md lg:mx-0 lg:block lg:max-w-none"
           aria-hidden="true"
         >
-          <div className="hero-search mb-4 flex items-center gap-2 rounded-2xl border border-border/80 bg-surface/90 px-4 py-3 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-md">
-            <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-accent hero-search-dot" />
+          <div className="hero-search mb-4 flex items-center gap-2 rounded-2xl border border-border/80 bg-surface/90 px-4 py-3 shadow-lg backdrop-blur-md">
+            <span className="hero-search-dot size-2.5 shrink-0 rounded-full bg-accent" />
             <span className="hero-type text-sm font-medium text-ink/80">
               React developer jobs
             </span>
             <span className="hero-caret h-4 w-0.5 shrink-0 bg-accent" />
           </div>
 
-          <div className="relative space-y-3">
-            <div className="hero-job hero-job-1 rounded-2xl border border-border/70 bg-surface/90 p-4 shadow-[0_16px_40px_rgba(15,23,42,0.1)] backdrop-blur-md">
+          <div className="relative space-y-3 overflow-hidden px-1 pt-2">
+            <div className="hero-job hero-job-1 rounded-2xl border border-border/70 bg-surface/90 p-4 shadow-xl backdrop-blur-md">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-ink">
@@ -113,7 +112,7 @@ const HeroSection = () => {
                   </p>
                   <p className="mt-1 text-xs text-muted">Remote · React · TypeScript</p>
                 </div>
-                <span className="hero-match shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-[10px] font-bold tracking-wide text-accent">
+                <span className="hero-match shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-xs font-bold tracking-wide text-accent">
                   98% match
                 </span>
               </div>
@@ -122,38 +121,38 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="hero-job hero-job-2 rounded-2xl border border-border/70 bg-surface/85 p-4 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
+            <div className="hero-job hero-job-2 rounded-2xl border border-border/70 bg-surface/85 p-4 shadow-lg backdrop-blur-md">
               <p className="truncate text-sm font-semibold text-ink">Backend Engineer</p>
               <p className="mt-1 text-xs text-muted">Hybrid · Node · PostgreSQL</p>
               <div className="mt-3 flex gap-2">
-                <span className="rounded-md bg-accent-soft px-2 py-0.5 text-[10px] font-semibold text-accent">
+                <span className="rounded-md bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent">
                   Full-time
                 </span>
-                <span className="rounded-md bg-bg px-2 py-0.5 text-[10px] font-semibold text-muted">
+                <span className="rounded-md bg-bg px-2 py-0.5 text-xs font-semibold text-muted">
                   $120k+
                 </span>
               </div>
             </div>
 
-            <div className="hero-job hero-job-3 rounded-2xl border border-border/60 bg-surface/80 p-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur-md">
+            <div className="hero-job hero-job-3 rounded-2xl border border-border/60 bg-surface/80 p-4 shadow-md backdrop-blur-md">
               <p className="truncate text-sm font-semibold text-ink">DevOps Specialist</p>
               <p className="mt-1 text-xs text-muted">On-site · AWS · Kubernetes</p>
             </div>
 
-            <div className="pointer-events-none absolute -left-5 top-14 hero-float-tag rounded-full border border-accent/30 bg-accent px-3 py-1 text-[11px] font-semibold text-white shadow-lg">
+            <div className="hero-float-tag pointer-events-none absolute top-14 left-2 rounded-full border border-accent/30 bg-accent px-3 py-1 text-xs font-semibold text-white shadow-lg">
               Apply now
             </div>
-            <div className="pointer-events-none absolute -right-3 bottom-6 hero-float-tag-delay rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold text-ink shadow-md">
+            <div className="hero-float-tag-delay pointer-events-none absolute right-2 bottom-6 rounded-full border border-border bg-surface px-3 py-1 text-xs font-semibold text-ink shadow-md">
               New role
             </div>
-            <div className="pointer-events-none absolute right-4 -top-2 hero-float-tag-slow rounded-full border border-accent/20 bg-accent-soft px-3 py-1 text-[11px] font-semibold text-accent">
+            <div className="hero-float-tag-slow pointer-events-none absolute top-0 right-4 rounded-full border border-accent/20 bg-accent-soft px-3 py-1 text-xs font-semibold text-accent">
               Hiring
             </div>
           </div>
         </div>
       </div>
 
-      <p className="hero-fade-4 relative z-10 pb-3 text-center text-[11px] text-muted/80 sm:pb-4 sm:text-xs">
+      <p className="hero-fade-4 relative z-10 pb-3 text-center text-xs text-muted/80 sm:pb-4">
         &copy; {new Date().getFullYear()} DevHunt
       </p>
     </section>

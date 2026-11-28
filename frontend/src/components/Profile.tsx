@@ -52,7 +52,7 @@ const Profile = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-red-400 text-xl font-semibold bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+            <div className="min-h-screen flex items-center justify-center text-red-400 text-xl font-semibold bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
                 {error}
             </div>
         );
@@ -65,7 +65,7 @@ const Profile = () => {
             {loading && <Loader />}
 
             {/* Background with gradient */}
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 md:px-8 flex items-center justify-center">
+            <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 md:px-8 flex items-center justify-center">
 
                 {/* Decorative background elements */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -80,7 +80,7 @@ const Profile = () => {
                         <div className="flex flex-col items-center text-center">
 
                             {/* Avatar */}
-                            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg shadow-blue-500/30 hover:scale-105 transition-transform duration-300 border-4 border-slate-700/50">
+                            <div className="w-28 h-28 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-4xl font-bold shadow-lg shadow-blue-500/30 hover:scale-105 transition-transform duration-300 border-4 border-slate-700/50">
                                 {user.username.charAt(0).toUpperCase()}
                             </div>
 
@@ -93,8 +93,8 @@ const Profile = () => {
                             {/* Status */}
                             <div className={`mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold shadow-lg
                                 ${user.isProfileCompleted
-                                    ? "bg-gradient-to-r from-green-500 to-emerald-500 shadow-green-500/30"
-                                    : "bg-gradient-to-r from-yellow-500 to-amber-500 shadow-yellow-500/30"
+                                    ? "bg-linear-to-r from-green-500 to-emerald-500 shadow-green-500/30"
+                                    : "bg-linear-to-r from-yellow-500 to-amber-500 shadow-yellow-500/30"
                                 } text-white`}>
                                 <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
                                 {user.isProfileCompleted ? "Profile Completed" : "Profile Incomplete"}
@@ -123,7 +123,7 @@ const Profile = () => {
                             <div>
                                 <NavLink
                                     to="/profilecompleted"
-                                    className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all duration-300 border border-slate-700/50"
+                                    className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-linear-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all duration-300 border border-slate-700/50"
                                 >
                                     <CiEdit className="w-5 h-5" />
                                     Edit Profile
@@ -133,7 +133,7 @@ const Profile = () => {
                             <div>
                                 <button
                                     onClick={() => setShowConfirmPanel(true)}
-                                    className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-sm hover:from-red-700 hover:to-rose-700 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300 border border-slate-700/50"
+                                    className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-linear-to-r from-red-600 to-rose-600 text-white font-semibold text-sm hover:from-red-700 hover:to-rose-700 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all duration-300 border border-slate-700/50"
                                 >
                                     <AiOutlineLogout className="w-5 h-5" />
                                     LogOut
@@ -145,7 +145,7 @@ const Profile = () => {
                     {/* RIGHT COLUMN - Profile Info */}
                     <div className="lg:col-span-2 bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 md:p-8 shadow-2xl shadow-slate-900/50 hover:shadow-slate-900/70 transition-all duration-300">
                         <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                            <span className="w-2 h-8 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full"></span>
+                            <span className="w-2 h-8 bg-linear-to-b from-blue-500 to-indigo-500 rounded-full"></span>
                             Profile Information
                         </h3>
 
@@ -173,7 +173,7 @@ const Profile = () => {
 
                         <div className="mt-10 pt-8 border-t border-slate-700/50">
                             <p className="text-slate-400 text-sm mb-4 uppercase tracking-wide font-semibold">Bio</p>
-                            <p className="text-slate-200 leading-relaxed break-words break-all whitespace-pre-wrap text-lg">{user.bio || "No bio added yet. Add a professional summary to showcase your skills and experience."}</p>
+                            <p className="text-slate-200 leading-relaxed wrap-break-word break-all whitespace-pre-wrap text-lg">{user.bio || "No bio added yet. Add a professional summary to showcase your skills and experience."}</p>
                         </div>
                     </div>
                 </div>
@@ -181,7 +181,7 @@ const Profile = () => {
                 {/* Confirmation Panel */}
                 {showConfirmPanel && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4">
-                        <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100 animate-in fade-in zoom-in duration-200">
+                        <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100 animate-in fade-in zoom-in">
 
                             {/* Icon */}
                             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border-2 border-red-500/20 flex items-center justify-center backdrop-blur-sm">
@@ -190,7 +190,7 @@ const Profile = () => {
 
                             {/* Title */}
                             <h2 className="text-2xl font-bold mb-3 text-white">
-                                Are you sure?
+                                Are You Sure?
                             </h2>
 
                             {/* Subtitle */}
@@ -202,7 +202,7 @@ const Profile = () => {
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button
                                     onClick={confirmLogout}
-                                    className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-2xl font-semibold shadow-xl shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 border border-red-500/20 hover:cursor-pointer"
+                                    className="flex-1 px-6 py-4 bg-linear-to-r from-red-600 to-rose-600 text-white rounded-2xl font-semibold shadow-xl shadow-red-500/30 hover:from-red-700 hover:to-rose-700 hover:shadow-red-500/50 hover:-translate-y-1 transition-all duration-300 border border-red-500/20 hover:cursor-pointer"
                                 >
                                     Yes, Logout
                                 </button>

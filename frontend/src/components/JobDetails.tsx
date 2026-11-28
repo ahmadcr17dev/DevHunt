@@ -177,7 +177,7 @@ const JobDetails = () => {
                             <FiBriefcase className="text-accent" size={24} />
                         </div>
                         <h1 className="font-display text-2xl font-semibold text-ink">
-                            Job not found
+                            Job Not Found
                         </h1>
                         <p className="mt-2 text-sm text-muted">
                             This role doesn&apos;t exist or is no longer available.
@@ -314,7 +314,7 @@ const JobDetails = () => {
                 >
                     <div>
                         <h2 className="font-display text-xl font-semibold text-ink">
-                            About this role
+                            About This Role
                         </h2>
                         <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-muted sm:text-base">
                             {job.jobDescription || "No description provided."}

@@ -140,7 +140,7 @@ const Navbar = () => {
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-lg">
             <h2 className="font-display text-xl font-semibold text-ink">
-              Sign out?
+              Sign Out?
             </h2>
             <p className="mt-2 text-sm text-muted">
               You will be logged out of your DevHunt account.

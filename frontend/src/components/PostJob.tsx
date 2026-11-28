@@ -236,7 +236,7 @@ const PostJob = () => {
                 <div className="mb-8">
                     <p className="text-sm font-medium text-accent">Employer</p>
                     <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-                        Post a job
+                        Post A Job
                     </h1>
                     <p className="mt-2 text-sm text-muted">
                         Publish a listing that job seekers can find on DevHunt.
@@ -256,7 +256,7 @@ const PostJob = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <Section title="Basic information">
+                    <Section title="Basic Information">
                         <Field label="Job title" error={getFieldError("jobTitle")}>
                             <input
                                 name="jobTitle"
@@ -329,7 +329,7 @@ const PostJob = () => {
                         </Field>
                     </Section>
 
-                    <Section title="Type & location">
+                    <Section title="Type & Location">
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <Field label="Job type" error={getFieldError("jobType")}>
                                 <select
@@ -454,7 +454,7 @@ const PostJob = () => {
                         </div>
                     </Section>
 
-                    <Section title="Job details">
+                    <Section title="Job Details">
                         <Field
                             label="Skills (comma-separated)"
                             error={getFieldError("jobSkills")}
@@ -515,7 +515,7 @@ const PostJob = () => {
                         </Field>
                     </Section>
 
-                    <Section title="Listing expiry">
+                    <Section title="Listing Expiry">
                         <Field label="Expire at" error={getFieldError("expireAt")}>
                             <input
                                 name="expireAt"
