@@ -60,14 +60,14 @@ const JobsOverview: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+            <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 relative overflow-hidden">
+        <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8 relative overflow-hidden">
             {/* Decorative background elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -77,10 +77,10 @@ const JobsOverview: React.FC = () => {
             <div className="max-w-6xl mx-auto relative z-10">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-xl shadow-blue-500/25">
+                    <div className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-600 shadow-xl shadow-blue-500/25">
                         <Briefcase className="h-10 w-10 text-white" />
                     </div>
-                    <h1 className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent mb-4">
+                    <h1 className="text-4xl sm:text-5xl font-black bg-linear-to-r from-white to-slate-200 bg-clip-text text-transparent mb-4">
                         Job Listings
                     </h1>
                     <p className="text-slate-400 text-xl max-w-2xl mx-auto">
@@ -91,7 +91,7 @@ const JobsOverview: React.FC = () => {
                 {/* Error Display */}
                 {error && (
                     <div className="mb-8 px-6 py-5 bg-red-500/10 border border-red-500/30 rounded-2xl backdrop-blur-sm flex items-center gap-3">
-                        <AlertCircle className="h-6 w-6 text-red-400 flex-shrink-0" />
+                        <AlertCircle className="h-6 w-6 text-red-400 shrink-0" />
                         <span className="text-red-300 font-medium">{error}</span>
                         <button
                             onClick={fetchJobs}
@@ -130,7 +130,7 @@ const JobsOverview: React.FC = () => {
                         <div className="inline-flex items-center justify-center w-24 h-24 mx-auto mb-8 bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-700">
                             <Briefcase className="h-12 w-12 text-slate-500" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-3">No jobs posted yet</h3>
+                        <h3 className="text-2xl font-bold text-white mb-3">No Jobs Posted Yet</h3>
                         <p className="text-slate-500 text-lg max-w-md mx-auto">
                             Get started by creating your first job listing.
                         </p>
@@ -196,7 +196,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, isDeleting }) => {
                 <div className="space-y-1 mb-4">
                     {(job.minSalary && job.maxSalary) && (
                         <div className="flex items-center text-slate-300">
-                            <CoinsIcon className="h-4 w-4 mr-2 text-green-400 flex-shrink-0" />
+                            <CoinsIcon className="h-4 w-4 mr-2 text-green-400 shrink-0" />
                             <div>
                                 <span className="text-sm font-semibold">{job.minSalary}</span>
                                 <span> - </span>
@@ -206,14 +206,14 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, isDeleting }) => {
                         </div>
                     )}
                     <div className="flex items-center text-slate-400">
-                        <Clock className="h-4 w-4 mr-2 text-indigo-400 flex-shrink-0" />
+                        <Clock className="h-4 w-4 mr-2 text-indigo-400 shrink-0" />
                         <span className="text-sm font-medium">{job.jobType}</span>
                     </div>
                 </div>
             </div>
 
             {/* Job Footer */}
-            <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-slate-700/50 to-slate-800/50 border-t border-slate-700/50">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 bg-linear-to-r from-slate-700/50 to-slate-800/50 border-t border-slate-700/50">
                 <div className="flex items-center justify-between">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${job.status.toLowerCase() === 'active'
                         ? 'bg-green-500/20 text-green-300 border border-green-500/30'
